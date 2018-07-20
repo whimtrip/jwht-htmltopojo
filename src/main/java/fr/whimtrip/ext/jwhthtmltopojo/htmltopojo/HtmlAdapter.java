@@ -62,7 +62,7 @@ public class HtmlAdapter<T> {
     private Map<Class<?>, List> annotatedFields =  new LinkedHashMap<>();
 
 
-    HtmlAdapter(HtmlToPojoEngine htmlToPojoEngine, Class<T> clazz) {
+    public HtmlAdapter(HtmlToPojoEngine htmlToPojoEngine, Class<T> clazz) {
         this.htmlToPojoEngine = htmlToPojoEngine;
         this.clazz = clazz;
         htmlFieldCache = new LinkedHashMap<>();
