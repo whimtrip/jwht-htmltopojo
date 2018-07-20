@@ -86,7 +86,7 @@ public abstract class HtmlField<T> {
         }
 
         if (fieldShouldBeSet)
-            setFieldOrThrow(field, newInstance, rawValue);
+            setFieldOrThrow(newInstance, rawValue);
     }
 
     public abstract Object getRawValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T newInstance) throws FieldShouldNotBeSetException;
@@ -150,8 +150,7 @@ public abstract class HtmlField<T> {
     }
 
 
-
-    static void setFieldOrThrow(Field field, Object newInstance, Object value) {
+    public void setFieldOrThrow(Object newInstance, Object value) throws FieldSetException {
 
         try {
             field.setAccessible(true);
