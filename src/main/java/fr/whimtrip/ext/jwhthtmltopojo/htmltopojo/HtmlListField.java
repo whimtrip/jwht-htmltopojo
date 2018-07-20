@@ -23,15 +23,16 @@ class HtmlListField<T> extends HtmlField<T> {
         super(field, selector);
     }
 
+
     @Override
-    public void setValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T newInstance) {
+    public Object getRawValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T newInstance) {
         Elements nodes = selectChildren(node);
 
         Type genericType = field.getGenericType();
         Type type = ((ParameterizedType) genericType).getActualTypeArguments()[0];
         Class<?> listClass = (Class<?>) type;
 
-        setFieldOrThrow(field, newInstance, populateList(htmlToPojoEngine, nodes, listClass, newInstance));
+        return populateList(htmlToPojoEngine, nodes, listClass, newInstance);
     }
 
     private <V> List<V> populateList(HtmlToPojoEngine htmlToPojoEngine, Elements nodes, Class<V> listClazz, T parentObj) {

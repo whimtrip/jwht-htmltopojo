@@ -9,6 +9,7 @@
 package fr.whimtrip.ext.jwhthtmltopojo.htmltopojo;
 
 import fr.whimtrip.ext.jwhthtmltopojo.htmltopojo.annotation.Selector;
+import fr.whimtrip.ext.jwhthtmltopojo.htmltopojo.exception.FieldShouldNotBeSetException;
 import org.jsoup.nodes.Element;
 
 import java.lang.reflect.Field;
@@ -19,12 +20,13 @@ class HtmlSimpleField<T> extends HtmlField<T> {
     }
 
     @Override
-    public void setValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T newInstance) {
+    public Object getRawValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T newInstance) throws FieldShouldNotBeSetException {
         Element selectedNode = selectChild(node);
 
         if(shouldBeFetched(node, field, newInstance))
         {
-            setFieldOrThrow(field, newInstance, instanceForNode(selectedNode, field.getType()));
+           return instanceForNode(selectedNode, field.getType());
         }
+        throw new FieldShouldNotBeSetException(field);
     }
 }

@@ -13,6 +13,7 @@ import fr.whimtrip.ext.jwhthtmltopojo.htmltopojo.annotation.AcceptObjectIf;
 import fr.whimtrip.ext.jwhthtmltopojo.htmltopojo.annotation.Selector;
 import fr.whimtrip.ext.jwhthtmltopojo.htmltopojo.exception.DateParseException;
 import fr.whimtrip.ext.jwhthtmltopojo.htmltopojo.exception.FieldSetException;
+import fr.whimtrip.ext.jwhthtmltopojo.htmltopojo.exception.FieldShouldNotBeSetException;
 import fr.whimtrip.ext.jwhthtmltopojo.htmltopojo.exception.ParseException;
 import fr.whimtrip.ext.jwhthtmltopojo.htmltopojo.intfr.AcceptIfResolver;
 import fr.whimtrip.ext.jwhthtmltopojo.htmltopojo.intfr.HtmlDeserializer;
@@ -73,7 +74,22 @@ public abstract class HtmlField<T> {
         }
     }
 
-    public abstract void setValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T newInstance);
+    public void setValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T newInstance) {
+
+        Object rawValue = null;
+        boolean fieldShouldBeSet = true;
+        try {
+            rawValue = getRawValue(htmlToPojoEngine, node, newInstance);
+        }
+        catch (FieldShouldNotBeSetException e) {
+            fieldShouldBeSet = false;
+        }
+
+        if (fieldShouldBeSet)
+            setFieldOrThrow(field, newInstance, rawValue);
+    }
+
+    public abstract Object getRawValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T newInstance) throws FieldShouldNotBeSetException;
 
     Element selectChild(Element parent) {
         return getElementAtIndexOrNull(parent);
@@ -101,7 +117,7 @@ public abstract class HtmlField<T> {
 
 
     @SuppressWarnings("unchecked")
-    <U> U instanceForNode(Element node, Class<U> clazz) {
+    protected <U> U instanceForNode(Element node, Class<U> clazz) {
 
         if (clazz.equals(Element.class)) {
             return (U) node;
