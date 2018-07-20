@@ -27,14 +27,16 @@ import java.util.Map;
  * Converts HTML strings to Java.
  */
 public class HtmlAdapter<T> {
-    private HtmlToPojoEngine htmlToPojoEngine;
-    private Class<T> clazz;
-    private Map<String, HtmlField<T>> htmlFieldCache;
+
+
+    protected HtmlToPojoEngine htmlToPojoEngine;
+    protected Class<T> clazz;
+    protected Map<String, HtmlField<T>> htmlFieldCache;
     
-    private List<HtmlToPojoAnnotationMap<Inject>> injectFields = new ArrayList<>();
-    private List<HtmlToPojoAnnotationMap<Injected>> injectedFields = new ArrayList<>();
-    private List<HtmlToPojoAnnotationMap<HasLink>> hasListFields = new ArrayList<>();
-    private List<HtmlToPojoAnnotationMap<InjectParent>> injectParentFields = new ArrayList<>();
+    protected List<HtmlToPojoAnnotationMap<Inject>> injectFields = new ArrayList<>();
+    protected List<HtmlToPojoAnnotationMap<Injected>> injectedFields = new ArrayList<>();
+    protected List<HtmlToPojoAnnotationMap<HasLink>> hasListFields = new ArrayList<>();
+    protected List<HtmlToPojoAnnotationMap<InjectParent>> injectParentFields = new ArrayList<>();
 
 
 
