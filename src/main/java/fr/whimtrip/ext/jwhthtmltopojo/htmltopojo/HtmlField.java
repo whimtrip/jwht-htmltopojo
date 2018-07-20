@@ -66,6 +66,10 @@ public abstract class HtmlField<T> {
         this.selector = selector;
     }
 
+    public Field getField() {
+        return field;
+    }
+
     private void setLocaleFromTag(String localeTag) {
         if (localeTag.equals(Selector.NO_VALUE)) {
             locale = Locale.getDefault();
