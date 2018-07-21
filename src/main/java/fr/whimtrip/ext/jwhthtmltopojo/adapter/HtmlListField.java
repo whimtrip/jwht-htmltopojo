@@ -6,8 +6,10 @@
  * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
  */
 
-package fr.whimtrip.ext.jwhthtmltopojo;
+package fr.whimtrip.ext.jwhthtmltopojo.adapter;
 
+import fr.whimtrip.ext.jwhthtmltopojo.HtmlToPojoEngine;
+import fr.whimtrip.ext.jwhthtmltopojo.HtmlToPojoUtils;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.Selector;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

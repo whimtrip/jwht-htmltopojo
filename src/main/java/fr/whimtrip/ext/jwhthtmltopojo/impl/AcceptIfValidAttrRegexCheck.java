@@ -13,7 +13,7 @@
 package fr.whimtrip.ext.jwhthtmltopojo.impl;
 
 import fr.whimtrip.core.util.exception.ObjectCreationException;
-import fr.whimtrip.ext.jwhthtmltopojo.HtmlField;
+import fr.whimtrip.ext.jwhthtmltopojo.adapter.HtmlField;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.AttrRegexCheck;
 import fr.whimtrip.ext.jwhthtmltopojo.intfr.AcceptIfResolver;
 import org.jsoup.nodes.Element;

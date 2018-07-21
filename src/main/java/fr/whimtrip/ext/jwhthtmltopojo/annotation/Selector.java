@@ -8,7 +8,7 @@
 
 package fr.whimtrip.ext.jwhthtmltopojo.annotation;
 
-import fr.whimtrip.ext.jwhthtmltopojo.HtmlAdapter;
+import fr.whimtrip.ext.jwhthtmltopojo.adapter.HtmlAdapter;
 import fr.whimtrip.ext.jwhthtmltopojo.intfr.HtmlDeserializer;
 import org.jsoup.nodes.Element;
 

@@ -6,10 +6,12 @@
  * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
  */
 
-package fr.whimtrip.ext.jwhthtmltopojo;
+package fr.whimtrip.ext.jwhthtmltopojo.adapter;
 
 import fr.whimtrip.core.util.WhimtripUtils;
 import fr.whimtrip.core.util.exception.ObjectCreationException;
+import fr.whimtrip.ext.jwhthtmltopojo.HtmlToPojoEngine;
+import fr.whimtrip.ext.jwhthtmltopojo.HtmlToPojoUtils;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.*;
 import fr.whimtrip.ext.jwhthtmltopojo.htmltopojo.annotation.*;
 import org.jsoup.Jsoup;

@@ -1,5 +1,6 @@
 package fr.whimtrip.ext.jwhthtmltopojo;
 
+import fr.whimtrip.ext.jwhthtmltopojo.adapter.HtmlAdapter;
 import fr.whimtrip.ext.jwhthtmltopojo.intfr.HtmlAdapterFactory;
 
 public class DefaultHtmlAdapterFactory implements HtmlAdapterFactory {
