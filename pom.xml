@@ -22,9 +22,13 @@
 
     <url>https://www.whimtrip.fr</url>
 
+
+
     <scm>
-        <connection>scm:git:https://github.com/whimtrip/jwht-htmltopojo.git</connection>
-        <url>https://github.com/whimtrip/jwht-htmltopojo</url>
+        <connection>scm:git:git@github.com:whimtrip/jwht-htmltopojo.git</connection>
+        <developerConnection>scm:git:git@github.com:whimtrip/jwht-htmltopojo.git</developerConnection>
+        <url>https://github.com/whimtrip/jwht-htmltopojo.git</url>
+        <tag>HEAD</tag>
     </scm>
 
 
