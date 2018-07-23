@@ -13,7 +13,6 @@ import fr.whimtrip.core.util.exception.ObjectCreationException;
 import fr.whimtrip.ext.jwhthtmltopojo.HtmlToPojoEngine;
 import fr.whimtrip.ext.jwhthtmltopojo.HtmlToPojoUtils;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.*;
-import fr.whimtrip.ext.jwhthtmltopojo.htmltopojo.annotation.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 

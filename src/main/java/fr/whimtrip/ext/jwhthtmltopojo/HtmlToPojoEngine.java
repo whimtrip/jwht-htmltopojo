@@ -10,6 +10,7 @@ package fr.whimtrip.ext.jwhthtmltopojo;
 
 import fr.whimtrip.ext.jwhthtmltopojo.adapter.HtmlAdapter;
 import fr.whimtrip.ext.jwhthtmltopojo.intfr.HtmlAdapterFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -22,23 +23,23 @@ public class HtmlToPojoEngine {
     private final HtmlAdapterFactory htmlAdapterFactory;
 
     /**
-     * Creates a new Jspoon instance.
-     * @return a new Jspoon instance
+     * Creates a new HtmlToPojoEngine instance.
+     * @return a new HtmlToPojoEngine instance
      */
     public static HtmlToPojoEngine create() {
-        return new HtmlToPojoEngine(null);
+        return new HtmlToPojoEngine(new DefaultHtmlAdapterFactory());
     }
 
     /**
-     * Creates a new Jspoon instance.
+     * Creates a new HtmlToPojoEngine instance.
      * @param htmlAdapterFactory the factory that will instanciate HtmlAdapters
-     * @return a new Jspoon instance
+     * @return a new HtmlToPojoEngine instance
      */
     public static HtmlToPojoEngine create(HtmlAdapterFactory htmlAdapterFactory) {
         return new HtmlToPojoEngine(htmlAdapterFactory);
     }
 
-    private HtmlToPojoEngine(HtmlAdapterFactory htmlAdapterFactory) {
+    private HtmlToPojoEngine(@NotNull final HtmlAdapterFactory htmlAdapterFactory) {
 
         this.htmlAdapterFactory = htmlAdapterFactory;
         this.adapterCache = new LinkedHashMap<>();
