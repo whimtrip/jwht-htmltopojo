@@ -36,6 +36,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD })
 public @interface Selector {
+
     String NO_VALUE = "NO_VALUE";
 
     /** @return Css query */
