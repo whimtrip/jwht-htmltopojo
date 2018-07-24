@@ -42,9 +42,6 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
 
-    public static final Integer DEFAULT_NOT_FOUND_INTEGER = -1;
-    public static final Float DEFAULT_NOT_FOUND_FLOAT = -1.111111f;
-
     private final Field field;
     private final Selector selector;
     private final String cssQuery;

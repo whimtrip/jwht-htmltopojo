@@ -4,7 +4,6 @@
 
 package fr.whimtrip.ext.jwhthtmltopojo;
 
-import fr.whimtrip.ext.jwhthtmltopojo.adapter.AbstractHtmlFieldImpl;
 import fr.whimtrip.ext.jwhthtmltopojo.adapter.HtmlSimpleField;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.Selector;
 import fr.whimtrip.ext.jwhthtmltopojo.exception.DateParseException;
@@ -27,6 +26,9 @@ import java.util.Locale;
  */
 public class HtmlToPojoUtils {
 
+
+    public static final Integer DEFAULT_NOT_FOUND_INTEGER = -1;
+    public static final Float DEFAULT_NOT_FOUND_FLOAT = -1.111111f;
 
     /**
      *
@@ -84,13 +86,13 @@ public class HtmlToPojoUtils {
         }
         if (clazz.equals(Integer.class) || clazz.equals(int.class)) {
             if(value.equals(Selector.NO_VALUE))
-                return (U) AbstractHtmlFieldImpl.DEFAULT_NOT_FOUND_INTEGER;
+                return (U) DEFAULT_NOT_FOUND_INTEGER;
             return (U) Integer.valueOf(value);
         }
 
         if (clazz.equals(Long.class) || clazz.equals(long.class)) {
             if(value.equals(Selector.NO_VALUE))
-                return (U) Long.valueOf(AbstractHtmlFieldImpl.DEFAULT_NOT_FOUND_INTEGER);
+                return (U) Long.valueOf(DEFAULT_NOT_FOUND_INTEGER);
             return (U) Long.valueOf(value);
         }
 
@@ -117,13 +119,13 @@ public class HtmlToPojoUtils {
 
         if (clazz.equals(Float.class) || clazz.equals(float.class)) {
             if(value.equals(Selector.NO_VALUE))
-                return (U) AbstractHtmlFieldImpl.DEFAULT_NOT_FOUND_FLOAT;
+                return (U) DEFAULT_NOT_FOUND_FLOAT;
             return (U) Float.valueOf(Float.parseFloat(value));
         }
 
         if (clazz.equals(Double.class) || clazz.equals(double.class)) {
             if(value.equals(Selector.NO_VALUE))
-                return (U)Double.valueOf(AbstractHtmlFieldImpl.DEFAULT_NOT_FOUND_FLOAT);
+                return (U)Double.valueOf(DEFAULT_NOT_FOUND_FLOAT);
             return (U) Double.valueOf(Double.parseDouble(value));
         }
 
