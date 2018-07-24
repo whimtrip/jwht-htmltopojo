@@ -1,17 +1,14 @@
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
 
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
+
+
 
 package fr.whimtrip.ext.jwhthtmltopojo.impl;
 
 import fr.whimtrip.core.util.exception.ObjectCreationException;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.AcceptObjectIf;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.FilterFirstResultsOnly;
-import fr.whimtrip.ext.jwhthtmltopojo.intfr.AcceptIfResolver;
+import fr.whimtrip.ext.jwhthtmltopojo.annotation.Selector;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.AcceptIfResolver;
 import org.jsoup.nodes.Element;
 
 import java.lang.reflect.Field;
@@ -30,7 +27,7 @@ public class AcceptIfFirst implements AcceptIfResolver {
     private static final Map<Object, Integer> fieldsStats = new HashMap();
 
     @Override
-    public void init(Field field, Object parentObject) throws ObjectCreationException {
+    public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
         this.field = field;
         filterFirstResultsOnly = field.getAnnotation(FilterFirstResultsOnly.class);
 
@@ -57,7 +54,7 @@ public class AcceptIfFirst implements AcceptIfResolver {
     }
 
     @Override
-    public boolean acceptIf(Element element, Object parentObject) {
+    public boolean accept(Element element, Object parentObject) {
         Integer index = fieldsStats.get(parentObject);
         return index > filterFirstResultsOnly.after()
                 && fieldsStats.get(parentObject) <= filterFirstResultsOnly.before();

@@ -1,14 +1,10 @@
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
 
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
+
+
 
 package fr.whimtrip.ext.jwhthtmltopojo.annotation;
 
-import fr.whimtrip.ext.jwhthtmltopojo.intfr.AcceptIfResolver;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.AcceptIfResolver;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

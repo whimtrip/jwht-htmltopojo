@@ -1,16 +1,13 @@
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
 
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
+
+
 
 package fr.whimtrip.ext.jwhthtmltopojo.impl;
 
+import fr.whimtrip.core.util.exception.ObjectCreationException;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.Selector;
 import fr.whimtrip.ext.jwhthtmltopojo.exception.RegexDeserializerConversionException;
-import fr.whimtrip.ext.jwhthtmltopojo.intfr.HtmlDeserializer;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDeserializer;
 
 import java.lang.reflect.Field;
 
@@ -24,12 +21,11 @@ public class StringConcatenatorAndReplacerDeserializer implements HtmlDeserializ
 
 
     @Override
-    public HtmlDeserializer<String> init(Selector selector, Field field) {
+    public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
         replacerDeserializer = new ReplacerDeserializer();
-        replacerDeserializer.init(selector, field);
+        replacerDeserializer.init(field, parentObject, selector);
         concatenatorDeserializer = new StringConcatenatorDeserializer();
-        concatenatorDeserializer.init(selector, field);
-        return this;
+        concatenatorDeserializer.init(field, parentObject, selector);
     }
 
     @Override

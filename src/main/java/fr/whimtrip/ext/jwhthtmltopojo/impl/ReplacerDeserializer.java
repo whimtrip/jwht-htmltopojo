@@ -1,18 +1,10 @@
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
 
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
 
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
 
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
+
+
+
+
 
 package fr.whimtrip.ext.jwhthtmltopojo.impl;
 
@@ -20,7 +12,7 @@ import fr.whimtrip.core.util.exception.ObjectCreationException;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.ReplaceWith;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.Selector;
 import fr.whimtrip.ext.jwhthtmltopojo.exception.RegexDeserializerConversionException;
-import fr.whimtrip.ext.jwhthtmltopojo.intfr.HtmlDeserializer;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDeserializer;
 
 import java.lang.reflect.Field;
 
@@ -32,7 +24,7 @@ public class ReplacerDeserializer implements HtmlDeserializer<String> {
     private ReplaceWith replaceWith;
 
     @Override
-    public HtmlDeserializer<String> init(Selector selector, Field field) {
+    public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
 
         replaceWith = field.getAnnotation(ReplaceWith.class);
 
@@ -40,8 +32,6 @@ public class ReplacerDeserializer implements HtmlDeserializer<String> {
             throw new ObjectCreationException("Field " + field.getName() + " from object " + field.getDeclaringClass()
                     + " hasn't got @" + ReplaceWith.class.getSimpleName()
                     + "annotation that should be used with class " + this.getClass());
-
-        return this;
     }
 
     @Override

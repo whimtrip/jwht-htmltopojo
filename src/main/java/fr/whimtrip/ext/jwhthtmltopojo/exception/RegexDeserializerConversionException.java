@@ -1,29 +1,14 @@
 package fr.whimtrip.ext.jwhthtmltopojo.exception;
 
-public class RegexDeserializerConversionException extends HtmlToPojoException {
+public class RegexDeserializerConversionException extends ConversionException {
 
 
-    public RegexDeserializerConversionException() {
-
+    public RegexDeserializerConversionException(String value, String regex) {
+        super(String.format("Cannot deserialize field %s with regex %s.", value, regex));
     }
 
     public RegexDeserializerConversionException(String message) {
 
         super(message);
-    }
-
-    public RegexDeserializerConversionException(String message, Throwable cause) {
-
-        super(message, cause);
-    }
-
-    public RegexDeserializerConversionException(Throwable cause) {
-
-        super(cause);
-    }
-
-    public RegexDeserializerConversionException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

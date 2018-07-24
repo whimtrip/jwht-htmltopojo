@@ -1,10 +1,6 @@
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
 
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
+
+
 
 package fr.whimtrip.ext.jwhthtmltopojo.exception;
 

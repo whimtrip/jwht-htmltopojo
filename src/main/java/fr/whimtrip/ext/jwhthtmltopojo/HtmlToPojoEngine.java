@@ -1,15 +1,12 @@
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
 
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
+
+
 
 package fr.whimtrip.ext.jwhthtmltopojo;
 
-import fr.whimtrip.ext.jwhthtmltopojo.adapter.HtmlAdapter;
-import fr.whimtrip.ext.jwhthtmltopojo.intfr.HtmlAdapterFactory;
+import fr.whimtrip.ext.jwhthtmltopojo.adapter.DefaultHtmlAdapterImpl;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlAdapter;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlAdapterFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
@@ -17,6 +14,11 @@ import java.util.Map;
 
 /**
  * Coordinates binding between HTML values and Java objects.
+ *
+ * Part of project jwht-htmltopojo
+ *
+ * @author Louis-wht
+ * @since 24/07/18
  */
 public class HtmlToPojoEngine {
     private final Map<String, HtmlAdapter<?>> adapterCache;
@@ -55,7 +57,7 @@ public class HtmlToPojoEngine {
     public <T> HtmlAdapter<T> adapter(Class<T> clazz) {
         String key = clazz.getName();
         if (adapterCache.containsKey(key)) {
-            return (HtmlAdapter<T>) adapterCache.get(key);
+            return (DefaultHtmlAdapterImpl<T>) adapterCache.get(key);
         } else {
             HtmlAdapter<T> htmlAdapter = htmlAdapterFactory.instanciateAdapter(this, clazz);
             adapterCache.put(key, htmlAdapter);

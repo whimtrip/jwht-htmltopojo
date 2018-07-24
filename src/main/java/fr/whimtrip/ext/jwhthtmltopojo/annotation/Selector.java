@@ -1,15 +1,11 @@
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
 
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
+
+
 
 package fr.whimtrip.ext.jwhthtmltopojo.annotation;
 
-import fr.whimtrip.ext.jwhthtmltopojo.adapter.HtmlAdapter;
-import fr.whimtrip.ext.jwhthtmltopojo.intfr.HtmlDeserializer;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlAdapter;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDeserializer;
 import org.jsoup.nodes.Element;
 
 import java.lang.annotation.ElementType;
@@ -51,6 +47,8 @@ public @interface Selector {
 
     /** @return Regex for numbers and String, date format for Date. */
     String format() default NO_VALUE;
+
+    String dateFormat() default NO_VALUE;
 
     /** @return Locale string, used for Date and Float */
     String locale() default NO_VALUE;

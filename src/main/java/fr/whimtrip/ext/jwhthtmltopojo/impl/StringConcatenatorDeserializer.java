@@ -1,18 +1,10 @@
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
 
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
 
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
 
-/*
- * This code is licensed to WhimTrip©. For any question, please contact the author of the file.
- */
+
+
+
+
 
 package fr.whimtrip.ext.jwhthtmltopojo.impl;
 
@@ -20,7 +12,7 @@ import fr.whimtrip.core.util.exception.ObjectCreationException;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.Selector;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.StringConcatenator;
 import fr.whimtrip.ext.jwhthtmltopojo.exception.RegexDeserializerConversionException;
-import fr.whimtrip.ext.jwhthtmltopojo.intfr.HtmlDeserializer;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDeserializer;
 
 import java.lang.reflect.Field;
 
@@ -31,12 +23,12 @@ public class StringConcatenatorDeserializer implements HtmlDeserializer<String> 
 
     private StringConcatenator stringConcatenator;
 
+
     @Override
-    public HtmlDeserializer<String> init(Selector selector, Field field) throws ObjectCreationException {
+    public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
         stringConcatenator = field.getAnnotation(StringConcatenator.class);
         if(stringConcatenator == null)
             throw new ObjectCreationException("Please add a @StringConcatenator annotation when using StringConcatenatorDeserializer");
-        return this;
     }
 
     @Override

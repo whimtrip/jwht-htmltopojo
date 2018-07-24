@@ -4,7 +4,7 @@ import fr.whimtrip.core.util.exception.ObjectCreationException;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.Selector;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.TextLengthSelector;
 import fr.whimtrip.ext.jwhthtmltopojo.exception.RegexDeserializerConversionException;
-import fr.whimtrip.ext.jwhthtmltopojo.intfr.HtmlDeserializer;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDeserializer;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,17 +27,17 @@ public class TextLengthSelectorDeserializer implements HtmlDeserializer<String> 
 
     /**
      * Initialization requires a {@code {@link TextLengthSelector}} annotation to be built.
+     * @param field The actual field being deserialized.
+     * @param parentObject the parent object that will contain the deserialized object
      * @param selector automatically submitted {@code {@link Selector }} annotation available
      *                 on the given field.
-     * @param field The actual field being deserialized.
      * @return the deserializer itself.
      */
     @Override
-    public HtmlDeserializer<String> init(Selector selector, Field field) throws ObjectCreationException {
+    public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
         if(!field.isAnnotationPresent(TextLengthSelector.class))
             throw new ObjectCreationException(field, this.getClass(), TextLengthSelector.class);
         textLengthSelector = field.getAnnotation(TextLengthSelector.class);
-        return this;
     }
 
     /**
