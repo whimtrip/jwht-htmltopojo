@@ -33,7 +33,6 @@ import java.lang.annotation.Target;
  *
  * It can also be used with a class, then you don't need to annotate every field inside it.
  */
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD })
 public @interface Selector {
