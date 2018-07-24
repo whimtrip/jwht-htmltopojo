@@ -39,7 +39,6 @@ public @interface Selector {
 
     String NO_VALUE = "NO_VALUE";
 
-
     /** @return Css query */
     String value();
 
