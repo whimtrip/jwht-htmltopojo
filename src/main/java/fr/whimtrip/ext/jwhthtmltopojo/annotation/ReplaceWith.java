@@ -4,21 +4,39 @@
 
 package fr.whimtrip.ext.jwhthtmltopojo.annotation;
 
+import fr.whimtrip.ext.jwhthtmltopojo.impl.ReplacerDeserializer;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+
 /**
- * Created by LOUISSTEIMBERG on 20/11/2017.
+ *
+ * <p>Part of project jwht-htmltopojo</p>
+ *
+ * <p>
+ *     Used together with {@link ReplacerDeserializer},
+ *     this annotation will provide a way to easily replace
+ *     matching regex patterns in the input string with
+ *     static string.
+ * </p>
+ *
+ * @author Louis-wht
+ * @since 24/07/18
  */
-
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD })
 public @interface ReplaceWith {
 
+    /**
+     * @return the regex pattern to replace
+     */
     String value();
 
+    /**
+     * @return the static string to replace matching patterns with
+     */
     String with();
 }

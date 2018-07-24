@@ -43,7 +43,6 @@ public class DefaultHtmlAdapterImpl<T> implements HtmlAdapter<T> {
 
     protected List<HtmlToPojoAnnotationMap<Inject>> injectFields = new ArrayList<>();
     protected List<HtmlToPojoAnnotationMap<Injected>> injectedFields = new ArrayList<>();
-    protected List<HtmlToPojoAnnotationMap<HasLink>> hasListFields = new ArrayList<>();
     protected List<HtmlToPojoAnnotationMap<InjectParent>> injectParentFields = new ArrayList<>();
 
 
@@ -68,7 +67,6 @@ public class DefaultHtmlAdapterImpl<T> implements HtmlAdapter<T> {
 
         annotatedFields.put(Injected.class, injectedFields);
         annotatedFields.put(Inject.class, injectFields);
-        annotatedFields.put(HasLink.class, hasListFields);
         annotatedFields.put(InjectParent.class, injectParentFields);
 
         Field[] declaredFields = clazz.getDeclaredFields();

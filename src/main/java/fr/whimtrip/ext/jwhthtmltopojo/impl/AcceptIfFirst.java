@@ -12,9 +12,7 @@ import fr.whimtrip.ext.jwhthtmltopojo.intrf.AcceptIfResolver;
 import org.jsoup.nodes.Element;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>Part of project jwht-htmltopojo</p>
@@ -40,7 +38,7 @@ public class AcceptIfFirst implements AcceptIfResolver {
 
     private FilterFirstResultsOnly filterFirstResultsOnly;
 
-    private Map<Object, Integer> fieldsStats = new HashMap();
+    private int index = 0;
 
     @Override
     public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
@@ -53,25 +51,12 @@ public class AcceptIfFirst implements AcceptIfResolver {
             throw new ObjectCreationException("Field " + field.getName() + " from object " + field.getDeclaringClass()
                     + " has @" + AcceptObjectIf.class.getName() + " annotation on a non " + List.class.getName() + " field.");
 
-        if(fieldsStats.get(parentObject) == null)
-            fieldsStats.put(parentObject, 1);
-        else
-        {
-            for(Map.Entry<Object, Integer> entry : fieldsStats.entrySet())
-            {
-                if(entry.getKey().equals(parentObject))
-                {
-                    entry.setValue(entry.getValue() + 1);
-                    break;
-                }
-            }
-        }
+        index ++;
     }
 
     @Override
     public boolean accept(Element element, Object parentObject) {
-        Integer index = fieldsStats.get(parentObject);
-        return index > filterFirstResultsOnly.after()
-                && fieldsStats.get(parentObject) <= filterFirstResultsOnly.before();
+        return     index > filterFirstResultsOnly.start()
+                && index <= filterFirstResultsOnly.end();
     }
 }
