@@ -14,11 +14,18 @@ import org.jsoup.nodes.Element;
 import java.lang.reflect.Field;
 
 /**
- * POJO class fields html parser. Given an HTML node and a selector, this
- * class field can parse it to a corresponding POJO. Under the hood, it uses
- * another {@link HtmlAdapter} to serialize the corresponding subnode into
- * the correct POJO class.
+ * <p>Part of project jwht-htmltopojo</p>
+ *
+ * <p>
+ *     POJO class fields html parser. Given an HTML node and a selector, this
+ *     class field can parse it to a corresponding POJO. Under the hood, it uses
+ *     another {@link HtmlAdapter} to serialize the corresponding subnode into
+ *     the correct POJO class.
+ * </p>
+ *
  * @param <T> the type of the field
+ * @author Louis-wht
+ * @since 24/07/18
  */
 public class HtmlClassField<T> extends AbstractHtmlFieldImpl<T> {
 
@@ -48,7 +55,7 @@ public class HtmlClassField<T> extends AbstractHtmlFieldImpl<T> {
     public T getRawValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T parentObject) throws
             FieldShouldNotBeSetException {
 
-        HtmlAdapter htmlAdapter = htmlToPojoEngine.adapter(field.getType());
+        HtmlAdapter htmlAdapter = htmlToPojoEngine.adapter(getField().getType());
         Element selectedNode = selectChild(node);
 
 
@@ -62,6 +69,6 @@ public class HtmlClassField<T> extends AbstractHtmlFieldImpl<T> {
 
         }
 
-        throw new FieldShouldNotBeSetException(field);
+        throw new FieldShouldNotBeSetException(getField());
     }
 }

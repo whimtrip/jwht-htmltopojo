@@ -17,18 +17,33 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by LOUISSTEIMBERG on 23/11/2017.
+ * <p>Part of project jwht-htmltopojo</p>
+ *
+ * <p>Example implementation of an  {@link AcceptIfResolver}.</p>
+ *
+ * <p>
+ *     This one will only keep some results out of all inside a given List
+ *     of elements.  You can basically give a start and an end index to pick
+ *     from the list. Very useful when you only need for example the first
+ *     three elements of a list for example.
+ * </p>
+ *
+ * <p>
+ *     You have to provide an {@link FilterFirstResultsOnly} annotation on top of
+ *     the corresponding field in order for this deserializer to work properly.
+ * </p>
+ *
+ * @author Louis-wht
+ * @since 24/07/18
  */
 public class AcceptIfFirst implements AcceptIfResolver {
 
-    private Field field;
     private FilterFirstResultsOnly filterFirstResultsOnly;
 
-    private static final Map<Object, Integer> fieldsStats = new HashMap();
+    private Map<Object, Integer> fieldsStats = new HashMap();
 
     @Override
     public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
-        this.field = field;
         filterFirstResultsOnly = field.getAnnotation(FilterFirstResultsOnly.class);
 
         if(filterFirstResultsOnly == null)

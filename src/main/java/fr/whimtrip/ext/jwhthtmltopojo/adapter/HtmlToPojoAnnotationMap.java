@@ -2,6 +2,18 @@ package fr.whimtrip.ext.jwhthtmltopojo.adapter;
 
 import java.lang.reflect.Field;
 
+ /**
+ *
+ * <p>Part of project jwht-htmltopojo</p>
+ *
+ * <p>
+ *     Basic POJO to hold information regarding a given annotation for
+ *     a given field.
+ * </p>
+ *
+ * @author Louis-wht
+ * @since 24/07/18
+ */
 public class HtmlToPojoAnnotationMap<U>
 {
     private String name;

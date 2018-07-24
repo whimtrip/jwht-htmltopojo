@@ -23,8 +23,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Default implementation of an HtmlAdapter.
+ *
+ * <p>Part of project jwht-htmltopojo</p>
+ *
+ * <p>Default implementation of an HtmlAdapter.</p>
+ *
+ *
  * @param <T> the type this adapter will convert any HTML string to.
+ * @author Louis-wht
+ * @since 24/07/18
  */
 public class DefaultHtmlAdapterImpl<T> implements HtmlAdapter<T> {
 

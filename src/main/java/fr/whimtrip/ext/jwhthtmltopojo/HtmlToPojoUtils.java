@@ -68,9 +68,16 @@ public class HtmlToPojoUtils {
      * @return the casted value ready to be set to its corresponding field
      * @throws DateParseException if parsing the date resulted in a parsing
      *                            because of an invalid format/locale.
+     * @throws IllegalArgumentException if parsing the string to another class
+     *                                  resulted in an IllegalArgumentException.
+     *                                  For example if the string is "example" and
+     *                                  needs to be casted to an int, an
+     *                                  IllegalArgumentException will be thrown.
      */
     @SuppressWarnings("unchecked")
-    public static <U> U castValue(String value, Class<U> clazz, String format, Locale locale) throws DateParseException {
+    public static <U> U castValue(String value, Class<U> clazz, String format, Locale locale)
+            throws DateParseException,  IllegalArgumentException
+    {
 
         if (clazz.equals(String.class)) {
             return (U) value;

@@ -9,10 +9,7 @@ import fr.whimtrip.ext.jwhthtmltopojo.HtmlToPojoEngine;
 import fr.whimtrip.ext.jwhthtmltopojo.HtmlToPojoUtils;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.AcceptObjectIf;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.Selector;
-import fr.whimtrip.ext.jwhthtmltopojo.exception.DateParseException;
-import fr.whimtrip.ext.jwhthtmltopojo.exception.FieldSetException;
-import fr.whimtrip.ext.jwhthtmltopojo.exception.FieldShouldNotBeSetException;
-import fr.whimtrip.ext.jwhthtmltopojo.exception.ParseException;
+import fr.whimtrip.ext.jwhthtmltopojo.exception.*;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.AcceptIfResolver;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlAdapter;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDeserializer;
@@ -22,12 +19,16 @@ import org.jsoup.select.Elements;
 
 import java.lang.reflect.Field;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 
 /**
+ *
+ * Part of project jwht-htmltopojo
+ *
  *
  * Default implementation of {@link HtmlField}. This defines an implementing abstract class
  * with three implementing classes for simple fields {@link HtmlSimpleField}, POJO fields
@@ -36,6 +37,8 @@ import java.util.regex.Pattern;
  *
  *
  * @param <T> the type of the field to assign a value to.
+ * @author Louis-wht
+ * @since 24/07/18
  */
 public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
 
@@ -97,8 +100,12 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
      *                         fields as well as POJO fields.
      * @param node the node to extract the data from.
      * @param newInstance the instance to assign to the corresponding field the resulting value.
+     * @throws ParseException if the HTML element cannot be properly parsed.
+     * @throws FieldSetException if the value could not be set to the field. This will
+     *                           typically not be catch by HtmlToPojo lib and should be
+     *                           handle separately in outside classes.
      */
-    public void setValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T newInstance) {
+    public void setValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T newInstance) throws ParseException, FieldSetException{
 
         Object rawValue = null;
         boolean fieldShouldBeSet = true;
@@ -120,7 +127,7 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
      * @param newInstance the instance to assign the corresponding field {@code value}
      * @param value the value to assign to the corresponding field of {@code newInstance}
      * @throws FieldSetException if the value could not be set to the field. This will
-     *                           typically not be catch by HtmlToPojo lib and should be
+     *                           typically not be catched by HtmlToPojo lib and should be
      *                           handle separately in outside classes.
      */
     public void setFieldOrThrow(Object newInstance, Object value) throws FieldSetException {
@@ -129,7 +136,7 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
             field.setAccessible(true);
             field.set(newInstance, value);
         } catch (IllegalAccessException e) {
-            throw new FieldSetException(newInstance.getClass().getSimpleName(), field.getName());
+            throw new FieldSetException(field);
         }
     }
 
@@ -177,9 +184,14 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
      * @param <U> the type of the field/instance to create.
      * @return the parsed, computed and casted instance resulting from the
      *         given node.
+     * @throws ParseException when the node result cannot be parsed properly.
+     * @throws ConversionException when the node result cannot be pre or post
+     *                             converted with the field attributed
+     *                             {@link HtmlDeserializer}.
+
      */
     @SuppressWarnings("unchecked")
-    protected <U> U instanceForNode(Element node, Class<U> clazz, Object parentObject) {
+    protected <U> U instanceForNode(Element node, Class<U> clazz, Object parentObject) throws ParseException, ConversionException {
 
         if (clazz.equals(Element.class)) {
             return (U) node;
@@ -203,10 +215,13 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
         }
         try {
             return castValue(value, clazz);
-        }catch(IllegalArgumentException e)
+        }catch(IllegalArgumentException | ParseException e)
         {
             if(returnDefValueOnThrow)
                 return castValue(defValue, clazz);
+
+            if(e instanceof ParseException)
+                throw e;
             throw new ParseException(value, locale, field);
         }
     }
@@ -225,9 +240,43 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
             return true;
 
 
+        return innerShoudlBeFetched(e, parentObject, acceptObjectIf, null);
+    }
+
+    /**
+     * @param e the element selected for the current field.
+     * @param parentObject the parent object the field to analyse belongs to.
+     * @param acceptObjectIf the AcceptObjectIf annotation retrieved from the
+     *                       corresponding field
+     * @param resolverCache the cache for the AcceptIfResolver. One Resolver of
+     *                      each type should be instanciated per parent object.
+     *                      For list classes this creates some problems as one
+     *                      resolver for each type was instanciated each time.
+     *                      This didn't allowed to keep a contex per parent object
+     *                      which in turn made some features impossible.
+     *                      Providing the possibility to use a cache when called
+     *                      from {@link HtmlListField} gives us some more
+     *                      flexibility and possibilities over this problem.
+     *
+     * @return a boolean indicating wether this field should or shouldn't be
+     *         fetched.
+     */
+    protected boolean innerShoudlBeFetched(
+            Element e,
+            Object parentObject,
+            AcceptObjectIf acceptObjectIf,
+            Map<Class<? extends AcceptIfResolver>, AcceptIfResolver> resolverCache
+    ){
+
         for(Class<? extends AcceptIfResolver> resolverClazz : acceptObjectIf.value())
         {
-            AcceptIfResolver resolver = WhimtripUtils.createNewInstance(resolverClazz);
+            AcceptIfResolver resolver = null;
+
+            if(resolverCache != null)
+                resolver = resolverCache.get(resolverClazz);
+
+            if(resolver == null)
+                resolver = WhimtripUtils.createNewInstance(resolverClazz);
 
             resolver.init(field, parentObject, selector);
             if(!resolver.accept(e, parentObject))
@@ -274,8 +323,13 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
      * @throws DateParseException if U is a DateTime / Date field and if the
      *                            format and locale doesn't match the submitted
      *                            string input.
+     * @throws IllegalArgumentException if parsing the string to another class
+     *                                  resulted in an IllegalArgumentException.
+     *                                  For example if the string is "example" and
+     *                                  needs to be casted to an int, an
+     *                                  IllegalArgumentException will be thrown.
      */
-    private <U> U castValue(String value, Class<U> clazz) throws DateParseException {
+    private <U> U castValue(String value, Class<U> clazz) throws DateParseException, IllegalArgumentException {
         return HtmlToPojoUtils.castValue(value, clazz, dateFormat, locale);
     }
 
@@ -284,10 +338,9 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
      * This is the method that will handle regex pattern computing and processing.
      * @param value the input, eventually pre converted string
      *              (see {@link HtmlDeserializer#deserializePreConversion(String)})
-     * @param <U>
-     * @return
+     * @return regex edited string.
      */
-    private <U> String editStringWithPattern(String value) {
+    private String editStringWithPattern(String value) {
         if (!format.equals(Selector.NO_VALUE))
         {
             Pattern pattern = Pattern.compile(format);
@@ -314,12 +367,22 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
         return value;
     }
 
+    /**
+     *
+     * @param parentObject the parent object to which resulting value for this
+     *                     field will be assigned. It will be used to init the
+     *                     Html Deserializer.
+     * @return the built and initialized {@link HtmlDeserializer}.
+     */
     private HtmlDeserializer createDeserializer(Object parentObject) {
         HtmlDeserializer deserializer = newInstanceOfDeserializer();
         deserializer.init(field, parentObject, selector);
         return deserializer;
     }
 
+    /**
+     * @return newly instanciated {@link HtmlDeserializer}
+     */
     private HtmlDeserializer newInstanceOfDeserializer() {
         return WhimtripUtils.createNewInstance(deserializer);
     }

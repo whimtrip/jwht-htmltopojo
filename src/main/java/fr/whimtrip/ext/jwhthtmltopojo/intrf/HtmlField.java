@@ -5,8 +5,10 @@ import fr.whimtrip.ext.jwhthtmltopojo.adapter.AbstractHtmlFieldImpl;
 import fr.whimtrip.ext.jwhthtmltopojo.adapter.HtmlClassField;
 import fr.whimtrip.ext.jwhthtmltopojo.adapter.HtmlListField;
 import fr.whimtrip.ext.jwhthtmltopojo.adapter.HtmlSimpleField;
+import fr.whimtrip.ext.jwhthtmltopojo.exception.ConversionException;
 import fr.whimtrip.ext.jwhthtmltopojo.exception.FieldSetException;
 import fr.whimtrip.ext.jwhthtmltopojo.exception.FieldShouldNotBeSetException;
+import fr.whimtrip.ext.jwhthtmltopojo.exception.ParseException;
 import org.jsoup.nodes.Element;
 
 import java.lang.reflect.Field;
@@ -22,7 +24,6 @@ import java.lang.reflect.Field;
  * with three implementing classes for simple fields {@link HtmlSimpleField}, POJO fields
  * {@link HtmlClassField} and List field {@link HtmlListField}. This helps a lot to implement
  * custom logic depending on the type of field we have to set.
- *
  *
  * @param <T> the type of the field to assign a value to.
  * @author Louis-wht
@@ -44,8 +45,16 @@ public interface HtmlField<T> {
      *                         fields as well as POJO fields.
      * @param node the node to extract the data from.
      * @param newInstance the instance to assign to the corresponding field the resulting value.
+     * @throws ParseException if the HTML element cannot be properly parsed.
+     * @throws FieldSetException if the value could not be set to the field. This will
+     *                           typically not be catch by HtmlToPojo lib and should be
+     *                           handle separately in outside classes.
+     * @throws ConversionException when the node result cannot be pre or post
+     *                             converted with the field attributed
+     *                             {@link HtmlDeserializer}.
      */
-    void setValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T newInstance);
+    void setValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T newInstance)
+            throws ParseException, FieldSetException, ConversionException;
 
 
     /**
@@ -54,7 +63,7 @@ public interface HtmlField<T> {
      * @param newInstance the instance to assign the corresponding field {@code value}
      * @param value the value to assign to the corresponding field of {@code newInstance}
      * @throws FieldSetException if the value could not be set to the field. This will
-     *                           typically not be catch by HtmlToPojo lib and should be
+     *                           typically not be catched by HtmlToPojo lib and should be
      *                           handle separately in outside classes.
      */
     void setFieldOrThrow(Object newInstance, Object value) throws FieldSetException;
@@ -73,8 +82,13 @@ public interface HtmlField<T> {
      * @throws FieldShouldNotBeSetException when the field should not be set. It happens when there is an
      *                                      {@link AcceptIfResolver} providing a {@code false} value in which
      *                                      case the field should not be set.
+     * @throws ParseException if the HTML element cannot be properly parsed.
+     * @throws ConversionException when the node result cannot be pre or post
+     *                             converted with the field attributed
+     *                             {@link HtmlDeserializer}.
      */
-    T getRawValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T parentObject) throws FieldShouldNotBeSetException;
+    T getRawValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T parentObject)
+            throws FieldShouldNotBeSetException, ParseException, ConversionException;
 
     /**
      * @return the field this adapter is supposed to handle.

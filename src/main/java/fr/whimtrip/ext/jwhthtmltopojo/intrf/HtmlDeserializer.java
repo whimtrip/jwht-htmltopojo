@@ -41,7 +41,7 @@ import fr.whimtrip.ext.jwhthtmltopojo.impl.TextLengthSelectorDeserializer;
  *
  *  <pre>
  *      &#64;Selector(
- *          value = "some-cess-query",
+ *          value = "some-css-query",
  *          useDeserializer = true,
  *          // if you want the pre conversion method to be called
  *          preConvert = true,
@@ -101,7 +101,7 @@ public interface HtmlDeserializer<T> extends Initiate {
      * </p>
      * <pre>
      *     &#64;Override
-     *     public String deserializePreConversion(String value){
+     *     public String deserializePostConversion(String value){
      *         return value;
      *     }
      * </pre>

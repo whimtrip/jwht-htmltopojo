@@ -6,13 +6,21 @@ package fr.whimtrip.ext.jwhthtmltopojo.impl;
 
 import fr.whimtrip.core.util.exception.ObjectCreationException;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.Selector;
-import fr.whimtrip.ext.jwhthtmltopojo.exception.RegexDeserializerConversionException;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDeserializer;
 
 import java.lang.reflect.Field;
 
 /**
- * Created by LOUISSTEIMBERG on 29/11/2017.
+ *
+ * Part of project jwht-htmltopojo
+
+ * This implementation of {@link HtmlDeserializer} provided out of the box compile
+ * a string replacer {@link ReplacerDeserializer} with a concatenator.
+ * {@link StringConcatenatorDeserializer}.
+ *
+ *
+ * @author Louis-wht
+ * @since 24/07/18
  */
 public class StringConcatenatorAndReplacerDeserializer implements HtmlDeserializer<String> {
 
@@ -29,7 +37,7 @@ public class StringConcatenatorAndReplacerDeserializer implements HtmlDeserializ
     }
 
     @Override
-    public String deserializePreConversion(String value) throws RegexDeserializerConversionException {
+    public String deserializePreConversion(String value){
         return concatenatorDeserializer
                 .deserializePreConversion(
                         replacerDeserializer.deserializePreConversion(value)
@@ -37,7 +45,7 @@ public class StringConcatenatorAndReplacerDeserializer implements HtmlDeserializ
     }
 
     @Override
-    public String deserializePostConversion(String value) throws RegexDeserializerConversionException {
+    public String deserializePostConversion(String value) {
         return concatenatorDeserializer
                 .deserializePostConversion(
                         replacerDeserializer.deserializePostConversion(value)

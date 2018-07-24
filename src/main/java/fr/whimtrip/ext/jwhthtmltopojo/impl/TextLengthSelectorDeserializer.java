@@ -3,7 +3,6 @@ package fr.whimtrip.ext.jwhthtmltopojo.impl;
 import fr.whimtrip.core.util.exception.ObjectCreationException;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.Selector;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.TextLengthSelector;
-import fr.whimtrip.ext.jwhthtmltopojo.exception.RegexDeserializerConversionException;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDeserializer;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -14,6 +13,20 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
+/**
+ *
+ * One of the default implementations of an {@link HtmlDeserializer} provided
+ * out of the box. This one helps you to retrieve easily the first chars,
+ * words or sentences of a given input string.
+ *
+ * You have to provide an {@link TextLengthSelector} annotation on top of
+ * the corresponding field in order for this deserializer to work properly.
+ *
+ * Part of project jwht-htmltopojo
+ *
+ * @author Louis-wht
+ * @since 24/07/18
+ */
 public class TextLengthSelectorDeserializer implements HtmlDeserializer<String> {
 
 
@@ -21,8 +34,8 @@ public class TextLengthSelectorDeserializer implements HtmlDeserializer<String> 
 
     private TextLengthSelector textLengthSelector;
 
-    private static final Pattern END_OF_SENTENCE = Pattern.compile("\\.\\s+");
-    private static final Pattern END_OF_WORD = Pattern.compile("(\\b[^\\s]+\\b)");
+    public static final Pattern END_OF_SENTENCE = Pattern.compile("\\.\\s+");
+    public static final Pattern END_OF_WORD = Pattern.compile("(\\b[^\\s]+\\b)");
 
 
     /**
@@ -31,7 +44,6 @@ public class TextLengthSelectorDeserializer implements HtmlDeserializer<String> 
      * @param parentObject the parent object that will contain the deserialized object
      * @param selector automatically submitted {@code {@link Selector }} annotation available
      *                 on the given field.
-     * @return the deserializer itself.
      */
     @Override
     public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
@@ -45,10 +57,9 @@ public class TextLengthSelectorDeserializer implements HtmlDeserializer<String> 
      * of both purposes.
      * @param value the value to convert
      * @return the converted value
-     * @throws RegexDeserializerConversionException
      */
     @Override
-    public String deserializePreConversion(String value) throws RegexDeserializerConversionException
+    public String deserializePreConversion(String value)
     {
         return filterValue(value);
     }
@@ -60,10 +71,9 @@ public class TextLengthSelectorDeserializer implements HtmlDeserializer<String> 
      * of both purposes.
      * @param value the value to convert
      * @return the converted value
-     * @throws RegexDeserializerConversionException
      */
     @Override
-    public String deserializePostConversion(String value) throws RegexDeserializerConversionException
+    public String deserializePostConversion(String value)
     {
         return filterValue(value);
     }
