@@ -230,9 +230,9 @@ through reflection.
 it with a [css query](https://jsoup.org/apidocs/org/jsoup/select/Selector.html).
 One classic technic to find easily the css query is to open the inspector of your
 browser on the html page/file you're trying to convert to a POJO, then select
-the tag you want to use, right click > copy > CSS Selector and then pass into the
-`value` of your `@Selector` and eventually tweak it if it needs some tweaking. You
-can test your CSS selector [here](https://try.jsoup.org/).
+the tag you want to use, right click > copy > CSS Selector and then past it into
+the `value` of your `@Selector` and eventually tweak it if it needs some tweaking.
+You can test your CSS selector [here](https://try.jsoup.org/).
 
 >`attr` parameter allows you to define which part of an html tag you want
 to use for the corresponding field. "text" is default. Also "html", "innerHtml"
