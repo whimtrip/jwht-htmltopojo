@@ -194,7 +194,12 @@ For the moment, let's see how to scrap this.
 
 Another short example can be found [here](https://github.com/Louis-wht/jwht-htmltopojo-booking-example)
 
-
+Please note that the `HtmlToPojoEngine` provides a cache of
+`HtmlAdapter` for faster parsing time. It is recommended to
+reuse the same `HtmlToPojoEngine` for your whole application 
+in most cases. If used with Spring framework for example, you
+could declare it as a bean and later reuse it anywhere with 
+the magic `@Autowired` annotation.
 
 # Complete Documentation
 
@@ -236,7 +241,7 @@ result in null values so be careful not to mistype those. An example of custom
 attr can be found in the above example with `ratingColor` field of `Meal` class.
 
 >`format` regex to use to format the input string. If none is provided, no regex
-pattern filter will be used.
+pattern filter will be used. 
 
 >`dateFormat` parameter allows to use define a custom date format to use to 
 convert the string to date objects. Depending on if you use standard java 
@@ -258,10 +263,12 @@ You can give this information with this parameter.
 >`indexForRegexPattern` parameter allows you to choose the index of the regex 
 group you want the regex pattern to output. Will only be used if you submitted a 
 `format` string. For example, if your regex is as following : `^(Restaurant|Hotel) n\*([0-9]+)$`
-and the input string is {@code Restaurant n*912} and you only want `912`, then you
+and the input string is `Restaurant n*912` and you only want `912`, then you
 should give this parameter the value `2` to select the second regex group. Another
 example can be found above in `Restaurant` class with `id` and `rank` fields 
-where both uses the same regex with another `indexForRegexPattern`.
+where both uses the same regex with another `indexForRegexPattern`. A great tool
+to test your regex and choose the correct `indexForRegexPattern` can be found
+[here](https://regex101.com/).
 
 >`returnDefValueOnThrow` parameter allows you to choose to return the default value
 in case a parsing exception occures during field processing.
@@ -271,15 +278,191 @@ in case a parsing exception occures during field processing.
 
 ## Deserializer
 
+
 ### General Knowledge
+
+
+An Html Deserializer can be used to define deserialization hooks.
+ 
+There is two different deserialization processes, pre and post
+deserialization.
+
+-   Pre deserialization happens just after the raw string value
+    has been gathered from the HTML element, it must return a
+    string.
+
+-   Post deserialization happens after regex matching and pre
+    deserialization and must return an object whose type converts
+    back to the field's type.
+    
+An HTML deserializer can only be used on simple fields (Integer,
+Long, Double, Float, String, Boolean, Date, Element) or on list
+of simple elements fields. Otherwise it won't get called.
+  
+To use an Html Deserializer on one of your fields, you should process
+as following :
+ 
+  ```
+      @Selector(
+          value = "some-css-query",
+          useDeserializer = true,
+          // if you want the pre conversion method to be called
+          preConvert = true,
+          // if you want the post conversion method to be called
+          postConvert = true,
+          deserializer = MyCustomDeserializer.class
+      )
+      private String myDeserializedString;
+  ```
 
 ### Provided Deserializer
 
+This lib comes with 4 out of the box serializer :
+
+#### TextLengthSelectorDeserializer :
+
+This one helps you to retrieve easily the first chars, words or
+sentences of a given input string.
+
+You have to provide an `@TextLengthSelector` annotation on 
+top of the corresponding field in order for this deserializer
+to work properly.
+
+Here is an example of how to use this Deserializer, more
+functionalities can be seen from the source class 
+`TextLengthSelector`.
+
+```
+    @Selector(
+          value = "some-css-query",
+          
+          useDeserializer = true,
+          preConvert = true,
+          deserializer = TextLengthSelectorDeserializer.class
+    )
+    @TextLengthSelector(
+        length = 3,
+        countWith = CountWith.SENTENCE
+    )    
+    // This string will contain maximum the 3 first sentences
+    // of the original input sentence
+    private String myQuiteLongPreviewString;
+        
+```
+
+#### StringConcatenatorDeserializer
+
+This one will concatenate your string with a static before /
+after value. You have to provide an `@StringConcatenator` 
+annotation on top of the corresponding field in order for it
+to work properly. This can be particularly helpful if you're
+trying to use a link to another HTTP ressource and an id is 
+hidden somewhere in an HTML tag. You can then concatenate before
+and after this id to build a full valid url.
+
+
+```
+    @Selector(
+          value = "some-css-query",
+          // some other parameters to retrieve only the id
+          // ...
+          
+          useDeserializer = true,
+          postConvert = true,
+          deserializer = StringConcatenatorDeserializer.class
+    )
+    @StringConcatenator(
+        before = "https://example.com/some-entity/",
+        after = "?someParam=someValue"
+    )
+    // Will result for example in https://example.com/some-entity/1725?someParam=someValue 
+    private String myUrl;
+        
+```
+
+#### ReplacerDeserializer
+
+This implementation provided out of the box will replace any
+valid regex pattern matched with another static string provided
+on top of the corresponding field with an `@ReplaceWith`
+annotation.
+
+
+```
+    @Selector(
+          value = "some-css-query",
+          // some other parameters to retrieve only a correct number
+          // ...
+          
+          useDeserializer = true,
+          preConvert = true,
+          deserializer = ReplacerDeserializer.class
+    )
+    @ReplaceWith(
+        value = ",",
+        with = ""
+    )
+    // Will remove from an unparsable number such as 7,456 the , 
+    // so that it can correctly become 7456
+    private Integer myNumber;
+        
+```
+
+
+#### StringConcatenatorAndReplacerDeserializer
+
+
+This implementation of `HtmlDeserializer` provided out of the 
+box compiles a string [replacer](#replacerdeserializer) with 
+a [concatenator](#stringconcatenatordeserializer).
+
+You can use it by combining both the `@ReplaceWith` and
+the `@StringConcatenator` annotations.
+
+
 ### Creating and using a custom Deserializer
+
+You can of course provide your own Deserializer implementations.
+To do so, you only need to implement `HtmlDeserializer` class 
+and then refer to your class in the `deserializer` parameter
+of an `@Selector`. Your Deserializer can also use its 
+custom annotation as does our built in implementations.
+
+Other custom annotations can be retrieved via reflection in the
+`init` method where the origin field is provided.
+
+Here is an example of a possible custom implementation :
+
+```
+public class CustomHtmlDeserializer implements HtmlDeserializer<String> {
+
+
+    @Override
+    public String deserializePreConversion(String value) throws ConversionException {
+        // Do some pre-conversion here (or return the value directly)
+    }
+
+    @Override
+    public String deserializePostConversion(String value) throws ConversionException {
+        // Do some post-conversion here (or return the value directly)
+    }
+
+    @Override
+    public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
+        // Here you can : store those object if needed in the conversion step, or search for
+        // an annotation in the field and store it in the object scope
+    }
+}
+
+
+```
+
 
 ## @AcceptObjectIf
 
 ### General Knowledge
+
+
 
 ### Provided AcceptObjectResolver
 
