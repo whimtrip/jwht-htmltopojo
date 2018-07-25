@@ -200,6 +200,75 @@ Another short example can be found [here](https://github.com/Louis-wht/jwht-html
 
 ## @Selector
 
+`@Selector` annotation is the annotation you need to use on each of
+your POJO's fields that you want to be accessed by jwht-htmltopojo
+through reflection.
+
+
+<p>Can be applied to any field of the following types (or their primitive equivalents)</p>
+<ul>
+    <li>String</li>
+    <li>Float</li>
+    <li>Double</li>
+    <li>Integer</li>
+    <li>Long</li>
+    <li>Boolean</li>
+    <li>java.util.Date</li>
+    <li>org.joda.time.DateTime</li>
+    <li>org.jsoup.nodes.Element</li>
+    <li>Any POJO class annotated with @Selector on fields to populate</li>
+    <li>List of supported types</li>
+</ul>
+
+
+>`value` parameter is the main parameter of this annotation. You must populate
+it with a [css query](https://jsoup.org/apidocs/org/jsoup/select/Selector.html).
+One classic technic to find easily the css query is to open the inspector of your
+browser on the html page/file you're trying to convert to a POJO, then select
+the tag you want to use, right click > copy > CSS Selector and then pass into the
+`value` of your `@Selector` and eventually tweak it if it needs some tweaking. You
+can test your CSS selector [here](https://try.jsoup.org/).
+
+>`attr` parameter allows you to define which part of an html tag you want
+to use for the corresponding field. "text" is default. Also "html", "innerHtml"
+or "outerHtml" is supported. Any other attribute can also be stated but it might
+result in null values so be careful not to mistype those. An example of custom 
+attr can be found in the above example with `ratingColor` field of `Meal` class.
+
+>`format` regex to use to format the input string. If none is provided, no regex
+pattern filter will be used.
+
+>`dateFormat` parameter allows to use define a custom date format to use to 
+convert the string to date objects. Depending on if you use standard java 
+date or joda time DateTime, please refer to their documentation for date format.
+Currently only Java Standard Date field and joda time DateTime fields are 
+supported. You can stipulate a locale for the date conversion. (see below).
+
+>`locale` parameter allows to select a locale string, used for Date and Float.
+
+>`defValue` parameter allows you to define a default String value if selected 
+HTML element is empty. If your field is not a String, this default string will 
+be casted to the required type through the default pipeline for simple types 
+fields (Integer, Long, Double, Float, String, Boolean, Date, Element).
+
+>`index` parameter allows you to Index define the index of the HTML element to 
+pick. If the css query has several results, then which one should be picked ? 
+You can give this information with this parameter.
+
+>`indexForRegexPattern` parameter allows you to choose the index of the regex 
+group you want the regex pattern to output. Will only be used if you submitted a 
+`format` string. For example, if your regex is as following : `^(Restaurant|Hotel) n\*([0-9]+)$`
+and the input string is {@code Restaurant n*912} and you only want `912`, then you
+should give this parameter the value `2` to select the second regex group. Another
+example can be found above in `Restaurant` class with `id` and `rank` fields 
+where both uses the same regex with another `indexForRegexPattern`.
+
+>`returnDefValueOnThrow` parameter allows you to choose to return the default value
+in case a parsing exception occures during field processing.
+
+> There are four other parameters that we will explain in the next paragraph.
+
+
 ## Deserializer
 
 ### General Knowledge
