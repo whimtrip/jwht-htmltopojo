@@ -453,8 +453,6 @@ public class CustomHtmlDeserializer implements HtmlDeserializer<String> {
         // an annotation in the field and store it in the object scope
     }
 }
-
-
 ```
 
 
@@ -462,13 +460,177 @@ public class CustomHtmlDeserializer implements HtmlDeserializer<String> {
 
 ### General Knowledge
 
+Sometimes, some field should not be set or some elements 
+in a list of other elements should not be parsed. This is 
+a quite common use case so we decided to include it somewhere
+in our API.
 
+To use such filter, the implementation is really pretty straight
+forward : 
+
+```
+     @Selector(/*some stuff in here*/)
+     @AcceptObjectIf(MyCustomAcceptIfResolver.class)
+     // Works with any supported field data type, 
+     // not necessarily a POJO altough it is usually
+     // the most common use case.
+     private SomePojo myConditionalPojoField;
+```
+
+Accepting an object happens really early in the processing chain,
+even before using the css query of the field itself. That's why
+you will retrieve an `Element` (jsoup Html Node).
 
 ### Provided AcceptObjectResolver
 
+There is two default implementations provided yet with this 
+library. 
+
+
+#### AcceptIfValidAttrRegexCheck
+
+This one will validate a field only if the submitted regex
+matches with the input string. It requires usage of 
+`@AttrRegexCheck` annotation on top of your field.
+
+You can use it as following :
+
+```
+     @Selector(/*some stuff in here*/)
+     @AcceptObjectIf(AcceptIfValidAttrRegexCheck.class)
+     @AttrRegexCheck(
+        value = "^someRegexCheck$",
+        // some custom attr to make the check more challenging
+        attr = "item-id"
+     )
+     private SomePojo myConditionalPojoField;
+```
+
+#### AcceptIfFirst
+
+
+This one will only keep some results out of all inside a given
+List of elements.  You can basically give a start and an end 
+index to pick from the list. Very useful when you only need 
+for example the first three elements of a list.
+
+You have to provide an `@FilterFirstResultsOnly` annotation on
+top of the corresponding field in order for this deserializer
+to work properly.
+
+You can use it as following :
+
+
+```
+     @Selector(/*some stuff in here*/)
+     @AcceptObjectIf(AcceptIfFirst.class)
+     @FilterFirstResultsOnly(
+        start = 0,
+        end = 5
+     )
+     // This will pick only the first 5 elements of the list
+     private List<SomePojo> myList;
+```
+
+
 ### Creating and using a custom AcceptObjectResolver
 
+
+You can of course provide your own `AcceptObjectResolver` 
+implementations. To do so, you only need to implement 
+`AcceptObjectResolver` class and then refer to your class
+in the `value` parameter of an `@AcceptObjectIf`. Your 
+custom `AcceptObjectResolver` can also use its custom 
+annotation as does our built in implementations.
+
+
+Other custom annotations can be retrieved via reflection in the
+`init` method where the origin field is provided.
+
+Here is an example of a possible custom implementation :
+
+
+```
+public class BookingEndorsementFilter implements AcceptIfResolver {
+    @Override
+    public boolean accept(Element element, Object parentObject) {
+
+        Elements endorsementName = element.select("div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(1)");
+        return !endorsementName.get(0).text().toLowerCase().contains("city");
+    }
+
+    @Override
+    public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
+
+    }
+}
+
+```
+
+This implementation can be found in [this example project](https://github.com/Louis-wht/jwht-htmltopojo-booking-example)
+and will filter out all endorsements whose names contains the 
+word "city". This a pretty stupid implementation in this 
+case but it features a great example of how this could be used.
+
 ## Injection
+
+Any framework needs a decent injection system. Here, it is mostly
+thought as to inject other POJO / parent objects into children
+one. This can prove to be really useful with more complex and
+custom `HtmlDeserializer` or `AcceptObjectResolver`. The 
+uses cases for this injections patterns really appeared when
+we built [our scrapping framework](https://github.com/whimtrip/jwht-scrapper)
+where we couldn't do much without such tool.
+
+There are three injections annotations we will describe here.
+
+### @InjectParent
+
+`@InjectParent` annotation will simply inject parent POJO
+in child POJO annotated field. Be careful, this field must
+have the same type as your parent POJO's type.
+
+
+### @Inject and @Injected
+
+`@Inject` works in collaboration with `@Injected`. `@Injected`
+has to be set on any parent POJO field to inject in a child 
+POJO field annotated with `@Inject`.
+
+As one might want to inject several fields from a Parent POJO
+to a child POJO, you must give a "name" to the injection both
+within the `@Inject` and `@Injected` annotation so that 
+`@Injected` fields will only inject fields values in `@Inject`
+fields if both injection name are the same.
+
+Additionnally, parent and child field must have the same type
+to avoid any type casting issue.
+
+Below is a correct example :
+
+```
+
+public class ParentPOJO {
+
+    @Injected("inject-me")
+    private String toBeInjectedString;
+    
+}
+
+
+public class ChildPOJO {
+
+    @Inject("inject-me")
+    private String injectedString;
+    
+}        
+
+```
+
+Here `toBeInjectedString` field value of `ParentPOJO` will 
+be injected into `injectedString` field of `ChildPOJO` because
+they share both the same type and same injection name 
+`inject-me`.
 
 ## Overriding / Extending Standard API
 

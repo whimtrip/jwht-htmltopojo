@@ -23,7 +23,7 @@ import java.util.List;
  *     This one will only keep some results out of all inside a given List
  *     of elements.  You can basically give a start and an end index to pick
  *     from the list. Very useful when you only need for example the first
- *     three elements of a list for example.
+ *     three elements of a list.
  * </p>
  *
  * <p>
