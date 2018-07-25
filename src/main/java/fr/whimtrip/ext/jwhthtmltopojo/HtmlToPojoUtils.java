@@ -147,6 +147,7 @@ public class HtmlToPojoUtils {
         String value;
         switch (attribute) {
             case "":
+            case "text":
                 value = node.text();
                 break;
             case "html":
