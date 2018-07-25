@@ -634,8 +634,42 @@ they share both the same type and same injection name
 
 ## Overriding / Extending Standard API
 
+Overriding the Standard API can be made in several ways.
+The most easy one is to instanciate your `HtmlToPojoEngine`
+with a custom `HtmlAdapterFactory` implementations. This
+factory will provide a factory method to create `HtmlAdapter`
+so that you can provide your own implementation of the interface,
+or extends the `DefaultHtmlAdapterImpl` to provide some custom
+or additional logic.
+
+You can also implement your own `HtmlField` implementation for 
+even more in depth modifications.
+
 # Upcoming Additions
+
+At the moment I am writing those lines, the main thing that
+needs to be added to this project is correct Unit Tests. Because
+of a lack of time, we couldn't provide real Unit Tests. This 
+is the first thing we want to add to this library.
+
+Please feel free to submit your suggestions.
+
 
 # How to contribute
 
+If you find a bug, an error in the documentation or any other 
+related problem, you can submit an issue or even propose a 
+patch. 
 
+Your pull requests will be evaluated properly but please submit
+decent commented code we won't have to correct and rewrite from
+scratch.
+
+We are open to suggestions, code rewriting for optimization, 
+etc...
+
+If anyone wants to help, we'd really appreciate if related Unit
+tests could be written first and before all to avoid further 
+problem.
+
+Thanks for using jwht-htmltopojo! Hope to hear from you!
