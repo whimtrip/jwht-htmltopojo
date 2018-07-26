@@ -27,7 +27,7 @@ highly inspired by [jspoon](https://github.com/DroidsOnRoids/jspoon).
 You can install this artifact from maven central repository.
 
 ### Maven
-```
+```xml
     <dependency>
              <groupId>fr.whimtrip</groupId>
              <artifactId>whimtrip-ext-htmltopojo</artifactId>
@@ -40,7 +40,7 @@ You can install this artifact from maven central repository.
 
 Imagine we need to parse the following html page :
 
-```
+```html
 <html>
     <head>
         <title>A Simple HTML Document</title>
@@ -75,7 +75,7 @@ Imagine we need to parse the following html page :
 
 Let's create the POJOs we want to map it to :
 
-```
+```java
 public class Restaurant {
 
     @Selector( value = "div.restaurant > h1")
@@ -125,7 +125,7 @@ public class Restaurant {
 
 And now the `Meal` class as well :
 
-```
+```java
 
 public class Meal {
 
@@ -161,7 +161,7 @@ POJOs and how some of the features showcased here works.
 
 For the moment, let's see how to scrap this.
 
-```
+```java
 
     
     private static final String MY_HTML_FILE = "my-html-file.html";
@@ -302,7 +302,7 @@ of simple elements fields. Otherwise it won't get called.
 To use an Html Deserializer on one of your fields, you should process
 as following :
  
-  ```
+  ```java
       @Selector(
           value = "some-css-query",
           useDeserializer = true,
@@ -332,7 +332,7 @@ Here is an example of how to use this Deserializer, more
 functionalities can be seen from the source class 
 `TextLengthSelector`.
 
-```
+```java
     @Selector(
           value = "some-css-query",
           
@@ -361,7 +361,7 @@ hidden somewhere in an HTML tag. You can then concatenate before
 and after this id to build a full valid url.
 
 
-```
+```java
     @Selector(
           value = "some-css-query",
           // some other parameters to retrieve only the id
@@ -388,7 +388,7 @@ on top of the corresponding field with an `@ReplaceWith`
 annotation.
 
 
-```
+```java
     @Selector(
           value = "some-css-query",
           // some other parameters to retrieve only a correct number
@@ -433,7 +433,7 @@ Other custom annotations can be retrieved via reflection in the
 
 Here is an example of a possible custom implementation :
 
-```
+```java
 public class CustomHtmlDeserializer implements HtmlDeserializer<String> {
 
 
@@ -468,7 +468,7 @@ in our API.
 To use such filter, the implementation is really pretty straight
 forward : 
 
-```
+```java
      @Selector(/*some stuff in here*/)
      @AcceptObjectIf(MyCustomAcceptIfResolver.class)
      // Works with any supported field data type, 
@@ -495,7 +495,7 @@ matches with the input string. It requires usage of
 
 You can use it as following :
 
-```
+```java
      @Selector(/*some stuff in here*/)
      @AcceptObjectIf(AcceptIfValidAttrRegexCheck.class)
      @AttrRegexCheck(
@@ -521,7 +521,7 @@ to work properly.
 You can use it as following :
 
 
-```
+```java
      @Selector(/*some stuff in here*/)
      @AcceptObjectIf(AcceptIfFirst.class)
      @FilterFirstResultsOnly(
@@ -550,7 +550,7 @@ Other custom annotations can be retrieved via reflection in the
 Here is an example of a possible custom implementation :
 
 
-```
+```java
 public class BookingEndorsementFilter implements AcceptIfResolver {
     @Override
     public boolean accept(Element element, Object parentObject) {
@@ -608,7 +608,7 @@ to avoid any type casting issue.
 
 Below is a correct example :
 
-```
+```java
 
 public class ParentPOJO {
 
