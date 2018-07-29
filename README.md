@@ -1,9 +1,9 @@
 # jwht-htmltopojo
 
-## Introduction : Java HTML to POJO framework
+## Introduction : Java HTML to POJO parser framework
 
 This lib provides a lightweight, fully featured, highly pluggable 
-and customizable Java Html to Pojo converter framework.
+and customizable Java Html to Pojo parser framework.
 
 It was built to be used with [jwht-scrapper](https://github.com/whimtrip/jwht-scrapper)
 which provides a gateway to create fully customisable real world HTTP
