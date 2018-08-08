@@ -24,12 +24,15 @@ import java.lang.reflect.Field;
  * the corresponding field with an {@link ReplaceWith} annotation.
  *
  * @author Louis-wht
- * @since 24/07/18
+ * @since 1.0.0
  */
 public class ReplacerDeserializer implements HtmlDeserializer<String> {
 
     private ReplaceWith replaceWith;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
 
@@ -39,11 +42,17 @@ public class ReplacerDeserializer implements HtmlDeserializer<String> {
             throw new ObjectCreationException(field, this.getClass(), ReplaceWith.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String deserializePreConversion(String value) {
         return value.replaceAll(replaceWith.value(), replaceWith.with());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String deserializePostConversion(String value) {
         return value.replaceAll(replaceWith.value(), replaceWith.with());

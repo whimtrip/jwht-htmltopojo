@@ -33,12 +33,15 @@ import java.util.regex.Pattern;
  * </p>
  *
  * @author Louis-wht
- * @since 24/07/18
+ * @since 1.0.0
  */
 public class AcceptIfValidAttrRegexCheck implements AcceptIfResolver {
 
     private AttrRegexCheck attrRegexCheck;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
         attrRegexCheck = field.getAnnotation(AttrRegexCheck.class);
@@ -47,6 +50,9 @@ public class AcceptIfValidAttrRegexCheck implements AcceptIfResolver {
             throw new ObjectCreationException(field, this.getClass(), AttrRegexCheck.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean accept(Element element, Object parentObject) {
         String attr = HtmlToPojoUtils.extractRawValue(element, "", attrRegexCheck.attr());

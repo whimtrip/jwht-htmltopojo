@@ -20,7 +20,7 @@ import java.lang.reflect.Field;
  *
  *
  * @author Louis-wht
- * @since 24/07/18
+ * @since 1.0.0
  */
 public class StringConcatenatorAndReplacerDeserializer implements HtmlDeserializer<String> {
 
@@ -28,6 +28,10 @@ public class StringConcatenatorAndReplacerDeserializer implements HtmlDeserializ
     private StringConcatenatorDeserializer concatenatorDeserializer;
 
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
         replacerDeserializer = new ReplacerDeserializer();
@@ -36,6 +40,9 @@ public class StringConcatenatorAndReplacerDeserializer implements HtmlDeserializ
         concatenatorDeserializer.init(field, parentObject, selector);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String deserializePreConversion(String value){
         return concatenatorDeserializer
@@ -44,6 +51,9 @@ public class StringConcatenatorAndReplacerDeserializer implements HtmlDeserializ
                 );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String deserializePostConversion(String value) {
         return concatenatorDeserializer

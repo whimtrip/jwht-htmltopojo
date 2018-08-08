@@ -21,7 +21,7 @@ import java.util.Locale;
  * </p>
  *
  * @author Louis-wht
- * @since 24/07/18
+ * @since 1.0.0
  */
 public class ParseException extends HtmlToPojoException {
 

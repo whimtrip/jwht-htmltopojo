@@ -38,7 +38,7 @@ import java.util.Map;
  *
  * @param <T> the type of the field
  * @author Louis-wht
- * @since 24/07/18
+ * @since 1.0.0
  */
 public class HtmlListField<T> extends AbstractHtmlFieldImpl<T> {
 

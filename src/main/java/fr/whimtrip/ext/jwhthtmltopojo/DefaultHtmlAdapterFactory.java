@@ -12,9 +12,13 @@ import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlAdapterFactory;
  * Part of project jwht-htmltopojo
  *
  * @author Louis-wht
- * @since 24/07/18
+ * @since 1.0.0
  */
 public class DefaultHtmlAdapterFactory implements HtmlAdapterFactory {
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T> HtmlAdapter<T> instanciateAdapter(HtmlToPojoEngine htmlToPojoEngine, Class<T> tClass) {
         return new DefaultHtmlAdapterImpl<>(htmlToPojoEngine, tClass);

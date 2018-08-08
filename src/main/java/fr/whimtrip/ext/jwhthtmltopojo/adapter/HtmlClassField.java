@@ -25,7 +25,7 @@ import java.lang.reflect.Field;
  *
  * @param <T> the type of the field
  * @author Louis-wht
- * @since 24/07/18
+ * @since 1.0.0
  */
 public class HtmlClassField<T> extends AbstractHtmlFieldImpl<T> {
 
@@ -52,8 +52,7 @@ public class HtmlClassField<T> extends AbstractHtmlFieldImpl<T> {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public T getRawValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T parentObject) throws
-            FieldShouldNotBeSetException {
+    public T getRawValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T parentObject) throws FieldShouldNotBeSetException {
 
         HtmlAdapter htmlAdapter = htmlToPojoEngine.adapter(getField().getType());
         Element selectedNode = selectChild(node);

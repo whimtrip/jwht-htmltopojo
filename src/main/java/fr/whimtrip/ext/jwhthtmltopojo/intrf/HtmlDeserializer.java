@@ -56,7 +56,7 @@ import fr.whimtrip.ext.jwhthtmltopojo.impl.TextLengthSelectorDeserializer;
  * Part of project jwht-htmltopojo
  *
  * @author Louis-wht
- * @since 24/07/18
+ * @since 1.0.0
  */
 public interface HtmlDeserializer<T> extends Initiate {
 

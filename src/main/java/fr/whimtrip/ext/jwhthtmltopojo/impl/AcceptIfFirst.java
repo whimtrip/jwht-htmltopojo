@@ -32,7 +32,7 @@ import java.util.List;
  * </p>
  *
  * @author Louis-wht
- * @since 24/07/18
+ * @since 1.0.0
  */
 public class AcceptIfFirst implements AcceptIfResolver {
 
@@ -40,6 +40,9 @@ public class AcceptIfFirst implements AcceptIfResolver {
 
     private int index = 0;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
         filterFirstResultsOnly = field.getAnnotation(FilterFirstResultsOnly.class);
@@ -54,6 +57,9 @@ public class AcceptIfFirst implements AcceptIfResolver {
         index ++;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean accept(Element element, Object parentObject) {
         return     index > filterFirstResultsOnly.start()

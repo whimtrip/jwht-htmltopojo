@@ -33,13 +33,16 @@ import java.lang.reflect.Field;
  * </p>
  *
  * @author Louis-wht
- * @since 24/07/18
+ * @since 1.0.0
  */
 public class StringConcatenatorDeserializer implements HtmlDeserializer<String> {
 
     private StringConcatenator stringConcatenator;
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
         stringConcatenator = field.getAnnotation(StringConcatenator.class);
@@ -47,11 +50,17 @@ public class StringConcatenatorDeserializer implements HtmlDeserializer<String> 
             throw new ObjectCreationException(field, this.getClass(), StringConcatenator.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String deserializePreConversion(String value) {
         return stringConcatenator.before() + value + stringConcatenator.after();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String deserializePostConversion(String value) {
         return stringConcatenator.before() + value + stringConcatenator.after();

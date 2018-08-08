@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  * Part of project jwht-htmltopojo
  *
  * @author Louis-wht
- * @since 24/07/18
+ * @since 1.0.0
  */
 public class TextLengthSelectorDeserializer implements HtmlDeserializer<String> {
 
@@ -39,11 +39,7 @@ public class TextLengthSelectorDeserializer implements HtmlDeserializer<String> 
 
 
     /**
-     * Initialization requires a {@code {@link TextLengthSelector}} annotation to be built.
-     * @param field The actual field being deserialized.
-     * @param parentObject the parent object that will contain the deserialized object
-     * @param selector automatically submitted {@code {@link Selector }} annotation available
-     *                 on the given field.
+     * {@inheritDoc}
      */
     @Override
     public void init(Field field, Object parentObject, Selector selector) throws ObjectCreationException {
@@ -53,10 +49,7 @@ public class TextLengthSelectorDeserializer implements HtmlDeserializer<String> 
     }
 
     /**
-     * Both post and pre deserialization will call the same method. It should only be used for one
-     * of both purposes.
-     * @param value the value to convert
-     * @return the converted value
+     * {@inheritDoc}
      */
     @Override
     public String deserializePreConversion(String value)
@@ -66,11 +59,7 @@ public class TextLengthSelectorDeserializer implements HtmlDeserializer<String> 
 
 
     /**
-     *
-     * Both post and pre deserialization will call the same method. It should only be used for one
-     * of both purposes.
-     * @param value the value to convert
-     * @return the converted value
+     * {@inheritDoc}
      */
     @Override
     public String deserializePostConversion(String value)

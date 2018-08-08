@@ -11,7 +11,6 @@ import fr.whimtrip.ext.jwhthtmltopojo.annotation.AcceptObjectIf;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.Selector;
 import fr.whimtrip.ext.jwhthtmltopojo.exception.*;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.AcceptIfResolver;
-import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlAdapter;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDeserializer;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlField;
 import org.jsoup.nodes.Element;
@@ -38,7 +37,7 @@ import java.util.regex.Pattern;
  *
  * @param <T> the type of the field to assign a value to.
  * @author Louis-wht
- * @since 24/07/18
+ * @since 1.0.0
  */
 public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
 
@@ -84,23 +83,9 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
     }
 
 
+
     /**
-     * This method must be able to set to the corresponding field of instance {@code newInstance}
-     * the value resulting of {@code node} parsing and conversion processing.
-     *
-     * It should call under the hood both {@link #setFieldOrThrow(Object, Object)} and
-     * {@link #getRawValue(HtmlToPojoEngine, Element, Object)} method to build up the corresponding
-     * values. Both those method should be public because they might be used separately from
-     * outside the class for more custom implementations.
-     *
-     * @param htmlToPojoEngine the engine to create another {@link HtmlAdapter} for List of POJO
-     *                         fields as well as POJO fields.
-     * @param node the node to extract the data from.
-     * @param newInstance the instance to assign to the corresponding field the resulting value.
-     * @throws ParseException if the HTML element cannot be properly parsed.
-     * @throws FieldSetException if the value could not be set to the field. This will
-     *                           typically not be catch by HtmlToPojo lib and should be
-     *                           handle separately in outside classes.
+     * {@inheritDoc}
      */
     public void setValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T newInstance) throws ParseException, FieldSetException{
 
@@ -119,13 +104,7 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
 
 
     /**
-     * This method is responsible of assigning the resulting {@code value} to the
-     * corresponding field of {@code newInstance}
-     * @param newInstance the instance to assign the corresponding field {@code value}
-     * @param value the value to assign to the corresponding field of {@code newInstance}
-     * @throws FieldSetException if the value could not be set to the field. This will
-     *                           typically not be catched by HtmlToPojo lib and should be
-     *                           handle separately in outside classes.
+     * {@inheritDoc}
      */
     public void setFieldOrThrow(Object newInstance, Object value) throws FieldSetException {
 
@@ -139,7 +118,7 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
 
 
     /**
-     * @return the field this adapter is supposed to handle.
+     * {@inheritDoc}
      */
     public Field getField() {
         return field;
