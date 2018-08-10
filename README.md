@@ -632,6 +632,40 @@ be injected into `injectedString` field of `ChildPOJO` because
 they share both the same type and same injection name 
 `inject-me`.
 
+
+## Logging
+
+The framework is completely logged using sl4j. Yet, few logs are outputed to the log
+appenders but we plan to add more at different leves of logging.
+
+All classes of this project belongs to `fr.whimtrip.ext.jwhthtmltopojo` so you can add
+for example to your `logback.xml` :
+
+```xml
+<logger name="fr.whimtrip.ext.jwhthtmltopojo" level="DEBUG"/>
+```
+
+Also please note that if you have a different appender than sl4j-simple (in which
+case you'll receive an exception saying that you have two logger on your class path
+from sl4j), you should import this library with the following maven config instead :
+
+```xml
+
+<dependency>
+    <groupId>fr.whimtrip</groupId>
+    <artifactId>whimtrip-core-utils</artifactId>
+    <version>1.0.12</version>
+    <exclusions>
+        <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>*</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+
+
+
 ## Overriding / Extending Standard API
 
 Overriding the Standard API can be made in several ways.
