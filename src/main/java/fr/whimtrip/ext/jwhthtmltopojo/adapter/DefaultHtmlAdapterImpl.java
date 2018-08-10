@@ -188,6 +188,7 @@ public class DefaultHtmlAdapterImpl<T> implements HtmlAdapter<T> {
      * @param field the field to parse annotations for.
      * @param <U> the type of each annotation built with type inference in the for loop.
      */
+    @SuppressWarnings("unchecked")
     private <U> void addAnnotatedField(final Field field)
     {
 
@@ -196,7 +197,7 @@ public class DefaultHtmlAdapterImpl<T> implements HtmlAdapter<T> {
         {
             U annotation = (U) a;
 
-            List<HtmlToPojoAnnotationMap<U>> fieldsConcerned = (List<HtmlToPojoAnnotationMap<U>>) annotatedFields.get(a.getClass());
+            List<HtmlToPojoAnnotationMap<U>> fieldsConcerned = (List<HtmlToPojoAnnotationMap<U>>) annotatedFields.get(a.annotationType());
             if(fieldsConcerned == null)
             {
                 fieldsConcerned = new ArrayList<>();

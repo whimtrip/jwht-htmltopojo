@@ -31,7 +31,7 @@ You can install this artifact from maven central repository.
     <dependency>
              <groupId>fr.whimtrip</groupId>
              <artifactId>whimtrip-ext-htmltopojo</artifactId>
-             <version>1.0.1</version>
+             <version>1.0.2</version>
     </dependency>
  ```
 
