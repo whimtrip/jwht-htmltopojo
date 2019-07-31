@@ -6,6 +6,7 @@ package fr.whimtrip.ext.jwhthtmltopojo.annotation;
 
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlAdapter;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDeserializer;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDifferentiator;
 import org.joda.time.DateTime;
 import org.jsoup.nodes.Element;
 
@@ -98,7 +99,7 @@ public @interface Selector {
     int[] indexForRegexPattern() default 0;
 
     /**
-     * @return Wether we need to use a deserializer or not
+     * @return Whether we need to use a deserializer or not
      */
     boolean useDeserializer() default false;
 
@@ -126,6 +127,11 @@ public @interface Selector {
      * @return Wether default value should be used on cast exception or if error should be thrown.
      */
     boolean returnDefValueOnThrow() default true;
+
+    /**
+     * @return the differentiator class we will use
+     */
+    Class<? extends HtmlDifferentiator> differentiator() default HtmlDifferentiator.class;
 
 
 }

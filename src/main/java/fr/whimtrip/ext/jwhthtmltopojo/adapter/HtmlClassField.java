@@ -4,11 +4,14 @@
 
 package fr.whimtrip.ext.jwhthtmltopojo.adapter;
 
+import fr.whimtrip.core.util.WhimtripUtils;
 import fr.whimtrip.ext.jwhthtmltopojo.HtmlToPojoEngine;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.Selector;
 import fr.whimtrip.ext.jwhthtmltopojo.exception.FieldShouldNotBeSetException;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.AcceptIfResolver;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlAdapter;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDeserializer;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDifferentiator;
 import org.jsoup.nodes.Element;
 
 import java.lang.reflect.Field;
@@ -28,10 +31,16 @@ import java.lang.reflect.Field;
  * @since 1.0.0
  */
 public class HtmlClassField<T> extends AbstractHtmlFieldImpl<T> {
+    
+    private boolean useDifferentiator;
+    private Class<? extends HtmlDifferentiator> differentiator;
 
 
     HtmlClassField(Field field, Selector selector) {
         super(field, selector);
+        
+        differentiator = selector.differentiator();
+        useDifferentiator = !HtmlDifferentiator.class.equals(differentiator);
     }
 
 
@@ -54,9 +63,16 @@ public class HtmlClassField<T> extends AbstractHtmlFieldImpl<T> {
     @SuppressWarnings("unchecked")
     public T getRawValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T parentObject) throws FieldShouldNotBeSetException {
 
-        HtmlAdapter htmlAdapter = htmlToPojoEngine.adapter(getField().getType());
         Element selectedNode = selectChild(node);
-
+        
+        Class<?> type = getField().getType();
+        
+        if (useDifferentiator)
+        {
+            type = createDifferentiator().differentiate(selectedNode);
+        }
+        
+        HtmlAdapter htmlAdapter = htmlToPojoEngine.adapter(type);
 
         if (selectedNode != null && shouldBeFetched(node, parentObject)) {
             return (T)
@@ -69,5 +85,16 @@ public class HtmlClassField<T> extends AbstractHtmlFieldImpl<T> {
         }
 
         throw new FieldShouldNotBeSetException(getField());
+    }
+
+    /**
+     *
+     * @param parentObject the parent object to which resulting value for this
+     *                     field will be assigned. It will be used to init the
+     *                     Html Deserializer.
+     * @return the built and initialized {@link HtmlDeserializer}.
+     */
+    private HtmlDifferentiator<T> createDifferentiator() {
+        return WhimtripUtils.createNewInstance(differentiator);
     }
 }
