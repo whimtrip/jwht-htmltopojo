@@ -246,7 +246,7 @@ public class DefaultHtmlAdapterImpl<T> implements HtmlAdapter<T> {
         if (List.class.isAssignableFrom(fieldClass))
             htmlField = new HtmlListField<>(field, selector);
 
-        else if (HtmlToPojoUtils.isSimple(fieldClass))
+        else if ((selector.postConvert() && selector.useDeserializer()) || HtmlToPojoUtils.isSimple(fieldClass))
             htmlField = new HtmlSimpleField<>(field, selector);
 
         else
