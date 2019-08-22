@@ -12,6 +12,7 @@ import fr.whimtrip.ext.jwhthtmltopojo.annotation.Selector;
 import fr.whimtrip.ext.jwhthtmltopojo.exception.*;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.AcceptIfResolver;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDeserializer;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDifferentiator;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlField;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -42,7 +43,7 @@ import java.util.regex.Pattern;
 public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
 
     private final Field field;
-    private final Selector selector;
+    protected final Selector selector;
     private final String cssQuery;
     private final String attribute;
     private final String format;
@@ -55,6 +56,9 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
     private boolean postConvert;
     private final boolean returnDefValueOnThrow;
     private final Class<? extends HtmlDeserializer> deserializer;
+    protected final boolean selectParent;
+    protected final boolean useDifferentiator;
+    private final Class<? extends HtmlDifferentiator> differentiator;
 
     private Locale locale = Locale.getDefault();
 
@@ -79,6 +83,9 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
         preConvert = selector.preConvert();
         postConvert = selector.postConvert();
         returnDefValueOnThrow = selector.returnDefValueOnThrow();
+        selectParent = selector.selectParent();
+        differentiator = selector.differentiator();
+        useDifferentiator = !HtmlDifferentiator.class.equals(differentiator);
         this.selector = selector;
     }
 
@@ -272,6 +279,16 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
      */
     private Element getElementAtIndexOrNull(Element parent) {
 
+        if (selectParent)
+        {
+            Element newParent = parent.parent();
+            
+            if (newParent != null)
+            {
+                parent = newParent;
+            }
+        }
+        
         if(cssQuery ==  null || cssQuery.length() < 1)
             return parent;
 
@@ -361,6 +378,19 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
      */
     private HtmlDeserializer newInstanceOfDeserializer() {
         return WhimtripUtils.createNewInstance(deserializer);
+    }
+
+    /**
+     *
+     * @param parentObject the parent object to which resulting value for this
+     *                     field will be assigned. It will be used to init the
+     *                     Html Deserializer.
+     * @return the built and initialized {@link HtmlDeserializer}.
+     */
+    protected HtmlDifferentiator createDifferentiator(Object parentObject) {
+        HtmlDifferentiator differentiator = WhimtripUtils.createNewInstance(this.differentiator);
+        differentiator.init(getField(), parentObject, selector);
+        return differentiator;
     }
 
 

@@ -32,15 +32,11 @@ import java.lang.reflect.Field;
  */
 public class HtmlClassField<T> extends AbstractHtmlFieldImpl<T> {
     
-    private boolean useDifferentiator;
-    private Class<? extends HtmlDifferentiator> differentiator;
+    
 
 
     HtmlClassField(Field field, Selector selector) {
         super(field, selector);
-        
-        differentiator = selector.differentiator();
-        useDifferentiator = !HtmlDifferentiator.class.equals(differentiator);
     }
 
 
@@ -69,7 +65,12 @@ public class HtmlClassField<T> extends AbstractHtmlFieldImpl<T> {
         
         if (useDifferentiator)
         {
-            type = createDifferentiator().differentiate(selectedNode);
+            type = createDifferentiator(parentObject).differentiate(selectedNode);
+            
+            if (type == null)
+            {
+                return null;
+            }
         }
         
         HtmlAdapter htmlAdapter = htmlToPojoEngine.adapter(type);
@@ -85,16 +86,5 @@ public class HtmlClassField<T> extends AbstractHtmlFieldImpl<T> {
         }
 
         throw new FieldShouldNotBeSetException(getField());
-    }
-
-    /**
-     *
-     * @param parentObject the parent object to which resulting value for this
-     *                     field will be assigned. It will be used to init the
-     *                     Html Deserializer.
-     * @return the built and initialized {@link HtmlDeserializer}.
-     */
-    private HtmlDifferentiator<T> createDifferentiator() {
-        return WhimtripUtils.createNewInstance(differentiator);
     }
 }

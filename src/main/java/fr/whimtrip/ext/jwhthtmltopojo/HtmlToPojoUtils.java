@@ -157,6 +157,9 @@ public class HtmlToPojoUtils {
             case "outerHtml":
                 value = node.outerHtml();
                 break;
+            case "tag":
+                value = node.tagName();
+                break;
             default:
                 value = node.attr(attribute);
                 break;

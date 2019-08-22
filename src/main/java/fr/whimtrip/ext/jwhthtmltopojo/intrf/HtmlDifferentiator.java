@@ -8,7 +8,7 @@ import org.jsoup.nodes.Element;
  * <p>
  * @param <T> The parent class to differentiate from
  */
-public interface HtmlDifferentiator<T>
+public interface HtmlDifferentiator<T> extends Initiate
 {
     /**
      * Determine which subclass of T should be instantiated and deserialised to for a given element.

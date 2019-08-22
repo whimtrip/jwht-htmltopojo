@@ -47,7 +47,7 @@ public class DefaultHtmlAdapterImpl<T> implements HtmlAdapter<T> {
     protected List<HtmlToPojoAnnotationMap<InjectParent>> injectParentFields = new ArrayList<>();
 
 
-    private Map<Class<?>, List> annotatedFields =  new LinkedHashMap<>();
+    protected Map<Class<?>, List> annotatedFields =  new LinkedHashMap<>();
 
 
     /**

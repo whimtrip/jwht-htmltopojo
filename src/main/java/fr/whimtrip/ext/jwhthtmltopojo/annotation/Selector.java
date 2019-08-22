@@ -124,9 +124,14 @@ public @interface Selector {
     Class<? extends HtmlDeserializer> deserializer() default HtmlDeserializer.class;
 
     /**
-     * @return Wether default value should be used on cast exception or if error should be thrown.
+     * @return Whether default value should be used on cast exception or if error should be thrown.
      */
     boolean returnDefValueOnThrow() default true;
+
+    /**
+     * @return Whether to use the parent element to select from instead of the current one.
+     */
+    boolean selectParent() default false;
 
     /**
      * @return the differentiator class we will use
