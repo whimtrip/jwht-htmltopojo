@@ -273,6 +273,8 @@ to test your regex and choose the correct `indexForRegexPattern` can be found
 >`returnDefValueOnThrow` parameter allows you to choose to return the default value
 in case a parsing exception occures during field processing.
 
+>`selectParent` parameter allows you to select the parent of the current element, instead of children.
+
 > There are four other parameters that we will explain in the next paragraph.
 
 
