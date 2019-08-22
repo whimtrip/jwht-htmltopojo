@@ -384,8 +384,8 @@ public abstract class AbstractHtmlFieldImpl<T> implements HtmlField<T> {
      *
      * @param parentObject the parent object to which resulting value for this
      *                     field will be assigned. It will be used to init the
-     *                     Html Deserializer.
-     * @return the built and initialized {@link HtmlDeserializer}.
+     *                     Html Differentiator.
+     * @return the built and initialized {@link HtmlDifferentiator}.
      */
     protected HtmlDifferentiator createDifferentiator(Object parentObject) {
         HtmlDifferentiator differentiator = WhimtripUtils.createNewInstance(this.differentiator);
