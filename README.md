@@ -235,8 +235,8 @@ the `value` of your `@Selector` and eventually tweak it if it needs some tweakin
 You can test your CSS selector [here](https://try.jsoup.org/).
 
 >`attr` parameter allows you to define which part of an html tag you want
-to use for the corresponding field. "text" is default. Also "html", "innerHtml"
-or "outerHtml" is supported. Any other attribute can also be stated but it might
+to use for the corresponding field. "text" is default. Also "tag", "html", "innerHtml"
+or "outerHtml" are supported. Any other attribute can also be stated but it might
 result in null values so be careful not to mistype those. An example of custom 
 attr can be found in the above example with `ratingColor` field of `Meal` class.
 
@@ -295,9 +295,9 @@ deserialization.
     deserialization and must return an object whose type converts
     back to the field's type.
     
-An HTML deserializer can only be used on simple fields (Integer,
+An HTML deserializer can only be used for pre-conversion on simple fields (Integer,
 Long, Double, Float, String, Boolean, Date, Element) or on list
-of simple elements fields. Otherwise it won't get called.
+of simple elements fields. It will only get called on other field types if postConvert = true.
   
 To use an Html Deserializer on one of your fields, you should process
 as following :
@@ -455,6 +455,22 @@ public class CustomHtmlDeserializer implements HtmlDeserializer<String> {
 }
 ```
 
+## Differentiator
+
+
+An Html Differentiator can be used to define class differentiation hooks.
+ 
+This can be used to determine which of multiple subclasses to instantiate for a field of a superclass type.
+
+The method `differentiate` must be implemented and is called with the selected JSoup Element and must return a Class which extends or implements the type of the field. It may also return null, in which case no object will be instantiated.
+ 
+  ```java
+      @Selector(
+          value = "selector for element",
+          deserializer = MyCustomDifferentiator.class
+      )
+      private SuperClass objectThatShouldBeSubClass;
+  ```
 
 ## @AcceptObjectIf
 
