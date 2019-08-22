@@ -47,7 +47,7 @@ public class DefaultHtmlAdapterImpl<T> implements HtmlAdapter<T> {
     protected List<HtmlToPojoAnnotationMap<InjectParent>> injectParentFields = new ArrayList<>();
 
 
-    private Map<Class<?>, List> annotatedFields =  new LinkedHashMap<>();
+    protected Map<Class<?>, List> annotatedFields =  new LinkedHashMap<>();
 
 
     /**
@@ -246,7 +246,7 @@ public class DefaultHtmlAdapterImpl<T> implements HtmlAdapter<T> {
         if (List.class.isAssignableFrom(fieldClass))
             htmlField = new HtmlListField<>(field, selector);
 
-        else if (HtmlToPojoUtils.isSimple(fieldClass))
+        else if ((selector.postConvert() && selector.useDeserializer()) || HtmlToPojoUtils.isSimple(fieldClass))
             htmlField = new HtmlSimpleField<>(field, selector);
 
         else

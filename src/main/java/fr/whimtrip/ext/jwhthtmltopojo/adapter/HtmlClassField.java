@@ -4,11 +4,14 @@
 
 package fr.whimtrip.ext.jwhthtmltopojo.adapter;
 
+import fr.whimtrip.core.util.WhimtripUtils;
 import fr.whimtrip.ext.jwhthtmltopojo.HtmlToPojoEngine;
 import fr.whimtrip.ext.jwhthtmltopojo.annotation.Selector;
 import fr.whimtrip.ext.jwhthtmltopojo.exception.FieldShouldNotBeSetException;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.AcceptIfResolver;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlAdapter;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDeserializer;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDifferentiator;
 import org.jsoup.nodes.Element;
 
 import java.lang.reflect.Field;
@@ -28,6 +31,8 @@ import java.lang.reflect.Field;
  * @since 1.0.0
  */
 public class HtmlClassField<T> extends AbstractHtmlFieldImpl<T> {
+    
+    
 
 
     HtmlClassField(Field field, Selector selector) {
@@ -54,9 +59,21 @@ public class HtmlClassField<T> extends AbstractHtmlFieldImpl<T> {
     @SuppressWarnings("unchecked")
     public T getRawValue(HtmlToPojoEngine htmlToPojoEngine, Element node, T parentObject) throws FieldShouldNotBeSetException {
 
-        HtmlAdapter htmlAdapter = htmlToPojoEngine.adapter(getField().getType());
         Element selectedNode = selectChild(node);
-
+        
+        Class<?> type = getField().getType();
+        
+        if (useDifferentiator)
+        {
+            type = createDifferentiator(parentObject).differentiate(selectedNode);
+            
+            if (type == null)
+            {
+                return null;
+            }
+        }
+        
+        HtmlAdapter htmlAdapter = htmlToPojoEngine.adapter(type);
 
         if (selectedNode != null && shouldBeFetched(node, parentObject)) {
             return (T)
