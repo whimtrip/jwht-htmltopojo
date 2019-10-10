@@ -135,6 +135,7 @@ public @interface Selector {
 
     /**
      * @return the differentiator class we will use
+     * @see HtmlDifferentiator
      */
     Class<? extends HtmlDifferentiator> differentiator() default HtmlDifferentiator.class;
 
