@@ -13,6 +13,7 @@ import fr.whimtrip.ext.jwhthtmltopojo.exception.ParseException;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.AcceptIfResolver;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlAdapter;
 import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDeserializer;
+import fr.whimtrip.ext.jwhthtmltopojo.intrf.HtmlDifferentiator;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -74,6 +75,16 @@ public class HtmlListField<T> extends AbstractHtmlFieldImpl<T> {
         Type genericType = getField().getGenericType();
         Type type = ((ParameterizedType) genericType).getActualTypeArguments()[0];
         Class<?> listClass = (Class<?>) type;
+        
+        if (useDifferentiator)
+        {
+            listClass = createDifferentiator(parentObject).differentiate(node);
+            
+            if (listClass == null)
+            {
+                return null;
+            }
+        }
 
         return (T) populateList(htmlToPojoEngine, nodes, listClass, parentObject);
     }
